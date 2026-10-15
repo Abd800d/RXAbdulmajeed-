@@ -55,7 +55,7 @@ jobs:
         if: success()
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh issue list --search "CI failure (run" --state open --json number --jq '.[].number' | xargs -r -n1 gh issue close || true
+        run: gh issue list --search "CI failure" --state open --json number,title --jq '.[] | select(.title | startswith("CI failure (run")) | .number' | xargs -r -n1 gh issue close || true
 
       # Temporary diagnostic: CI log downloads are unreachable from the dev
       # sandbox, so on failure the tail of the logs is posted to an issue.
