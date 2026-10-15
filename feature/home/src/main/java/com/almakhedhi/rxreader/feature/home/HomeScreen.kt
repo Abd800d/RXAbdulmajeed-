@@ -1,7 +1,6 @@
 package com.almakhedhi.rxreader.feature.home
 
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -37,6 +36,7 @@ import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.ReceiptLong
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.BorderStroke
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -87,11 +87,15 @@ import com.almakhedhi.rxreader.core.designsystem.theme.TealGradientStart
 import com.almakhedhi.rxreader.core.designsystem.theme.TealPrimary
 
 /**
- * Home screen matching the reference design. Phase 0: static UI only —
- * every action shows a "coming soon" message until later phases wire it up.
+ * Home screen matching the reference design. The scan and gallery cards
+ * launch the real capture flow; other actions arrive in later phases.
  */
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    onScanClick: () -> Unit,
+    onGalleryClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val context = LocalContext.current
     val comingSoon = stringResource(R.string.msg_coming_soon)
     val soon: () -> Unit = {
@@ -108,7 +112,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         HomeHeader(onHistoryClick = soon, onSettingsClick = soon)
         HeroCard()
         SearchCard(onSearch = soon)
-        ActionRow(onScanClick = soon, onGalleryClick = soon)
+        ActionRow(onScanClick = onScanClick, onGalleryClick = onGalleryClick)
         RecentCard(onViewAllClick = soon, onItemClick = soon)
         HomeFooter()
         Spacer(modifier = Modifier.height(8.dp))
@@ -660,6 +664,6 @@ private fun HomeFooter() {
 @Composable
 private fun HomeScreenPreview() {
     RxReaderTheme {
-        HomeScreen()
+        HomeScreen(onScanClick = {}, onGalleryClick = {})
     }
 }

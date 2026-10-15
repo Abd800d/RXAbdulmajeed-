@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Analysis progress -->
+    <string name="analyzing_title">جارٍ تحليل الوصفة</string>
+    <string name="analyzing_step_prepare">تجهيز الصورة</string>
+    <string name="analyzing_step_read">قراءة النص</string>
+    <string name="analyzing_step_extract">استخراج الأدوية</string>
+    <string name="analyzing_step_review">مراجعة الجودة</string>
+    <string name="analyzing_wait">قد يستغرق التحليل بضع ثوانٍ…</string>
+    <string name="analyzing_retry">إعادة المحاولة</string>
+    <string name="analyzing_back">رجوع</string>
+    <string name="analyzing_error_load">تعذر قراءة الصورة — حاول مجدداً</string>
+    <string name="analyzing_error_config">أكمل إعداد Firebase أولاً (انظر خطوات README)</string>
+    <string name="analyzing_error_generic">فشل التحليل — تحقق من الإنترنت وحاول مجدداً</string>
+    <string name="cd_scan_thumbnail">صورة الوصفة الجاري تحليلها</string>
+
+    <!-- Quality gate -->
+    <string name="quality_title">جودة الصورة منخفضة</string>
+    <string name="quality_blurry">الصورة مهزوزة — يُفضَّل إعادة التصوير بثبات أكبر</string>
+    <string name="quality_dark">الصورة مظلمة — يُفضَّل التصوير بإضاءة أفضل</string>
+    <string name="quality_retake">إعادة الالتقاط</string>
+    <string name="quality_continue">المتابعة رغم ذلك</string>
+
+    <!-- Crop -->
+    <string name="crop_loading">جارٍ تجهيز القص…</string>
+
+    <!-- In-app camera fallback -->
+    <string name="camera_perm_title">إذن الكاميرا مطلوب</string>
+    <string name="camera_perm_text">تعذَّر تشغيل الماسح الذكي، لذلك يحتاج التطبيق إلى الكاميرا لتصوير الوصفة مباشرة.</string>
+    <string name="camera_perm_grant">منح الإذن</string>
+    <string name="camera_back">رجوع</string>
+    <string name="camera_capture">التقاط الصورة</string>
+    <string name="camera_error">تعذر التصوير: %1$s</string>
+
+    <!-- Result review -->
+    <string name="result_title">نتيجة التحليل</string>
+    <string name="result_count">عدد الأدوية: %1$d</string>
+    <string name="result_review_notice">راجع كل دواء بعناية قبل الاعتماد — هذه نتيجة آلية وليست صرفاً نهائياً.</string>
+    <string name="result_confidence">الثقة %1$d%%</string>
+    <string name="result_alternatives">بدائل محتملة:</string>
+    <string name="result_warnings">تنبيهات:</string>
+    <string name="result_doctor">الطبيب: %1$s</string>
+    <string name="result_illegible">غير واضح — راجع الصورة الأصلية</string>
+    <string name="result_instructions">التعليمات:</string>
+    <string name="result_notes">ملاحظات:</string>
+    <string name="result_edit">تعديل</string>
+    <string name="result_select">تحديد على الصورة</string>
+    <string name="result_deselect">إلغاء التحديد</string>
+    <string name="result_confirm">تأكيد المراجعة</string>
+    <string name="result_confirmed_title">تمت مراجعة الوصفة</string>
+    <string name="result_confirmed_sub">سيُحفظ السجل في سجلّ الوصفات مع المرحلة 3 (قاعدة البيانات).</string>
+    <string name="result_done">عودة للرئيسية</string>
+    <string name="cd_source_image">صورة الوصفة الأصلية</string>
+
+    <!-- Edit sheet -->
+    <string name="edit_title">تعديل الدواء</string>
+    <string name="edit_trade">الاسم التجاري</string>
+    <string name="edit_scientific">الاسم العلمي</string>
+    <string name="edit_strength">التركيز</string>
+    <string name="edit_dose">الجرعة</string>
+    <string name="edit_frequency">التكرار</string>
+    <string name="edit_duration">المدة</string>
+    <string name="edit_save">حفظ</string>
+    <string name="edit_cancel">إلغاء</string>
+
+    <!-- Dosage forms -->
+    <string name="form_tablet">أقراص</string>
+    <string name="form_capsule">كبسولات</string>
+    <string name="form_syrup">شراب</string>
+    <string name="form_suspension">مُعلَّق</string>
+    <string name="form_injection">حقن</string>
+    <string name="form_drops">قطرات</string>
+    <string name="form_cream">كريم</string>
+    <string name="form_ointment">مرهم</string>
+    <string name="form_suppository">تحاميل</string>
+    <string name="form_inhaler">بخاخ</string>
+    <string name="form_sachet">أكياس</string>
+    <string name="form_other">أخرى</string>
+</resources>
