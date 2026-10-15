@@ -75,5 +75,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          { echo '```'; (tail -c 55000 build.log test.log lint.log 2>/dev/null || true); echo '```'; } > report.md
+          { echo '```'; (cat build.log test.log lint.log 2>/dev/null | tail -c 55000 || true); echo '```'; } > report.md
           gh issue create --title "CI failure (run ${{ github.run_id }})" --body-file report.md
