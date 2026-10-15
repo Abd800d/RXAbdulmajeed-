@@ -5,10 +5,10 @@ import android.graphics.Bitmap
 import com.almakhedhi.rxreader.core.ai.model.AnalysisResult
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
-import com.google.firebase.ai.GenerativeBackend
 import com.google.firebase.ai.ai
+import com.google.firebase.ai.type.Content
 import com.google.firebase.ai.type.GenerationConfig
-import com.google.firebase.ai.type.content
+import com.google.firebase.ai.type.GenerativeBackend
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
@@ -36,15 +36,18 @@ class FirebaseAiReader @Inject constructor(
             require(images.isNotEmpty()) { "No images to analyze" }
             val model = Firebase.ai(backend = GenerativeBackend.googleAI()).generativeModel(
                 modelName = MODEL_NAME,
-                generationConfig = GenerationConfig(responseMimeType = "application/json"),
-                systemInstruction = content { text(RX_SYSTEM_PROMPT) },
+                generationConfig = GenerationConfig.builder()
+                    .setResponseMimeType("application/json")
+                    .build(),
+                systemInstruction = Content.Builder()
+                    .addText(RX_SYSTEM_PROMPT)
+                    .build(),
             )
-            val response = model.generateContent(
-                content {
-                    images.forEach { image(it) }
-                    text(RX_USER_PROMPT)
-                },
-            )
+            val prompt = Content.Builder().apply {
+                images.forEach { addImage(it) }
+                addText(RX_USER_PROMPT)
+            }.build()
+            val response = model.generateContent(prompt)
             val raw = response.text ?: throw IllegalStateException("Empty AI response")
             json.decodeFromString<AnalysisResult>(stripFences(raw))
         }

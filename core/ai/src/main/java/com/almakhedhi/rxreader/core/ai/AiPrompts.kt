@@ -5,7 +5,7 @@ package com.almakhedhi.rxreader.core.ai
  * until the Firebase project exists and server-side templates / Remote
  * Config take over. Kept in English for best model performance.
  */
-internal const val RX_SYSTEM_PROMPT = """
+internal val RX_SYSTEM_PROMPT = """
 You are an expert clinical pharmacist specialized in reading handwritten prescriptions from Yemen and the Arab region. Analyze the attached image(s).
 
 1. Extract every medication line exactly as written ("written_text").
