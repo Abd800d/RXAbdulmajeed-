@@ -31,16 +31,11 @@ interface DrugDao {
     @Query("SELECT * FROM drugs WHERE tradeNorm = :norm AND deletedAt IS NULL")
     suspend fun findByTradeNorm(norm: String): List<DrugEntity>
 
-    /** Prefix full-text search over the denormalized search column. */
-    @Query(
-        """
-        SELECT drugs.* FROM drugs
-        JOIN drugs_fts ON drugs.rowid = drugs_fts.docid
-        WHERE drugs_fts MATCH :query AND drugs.deletedAt IS NULL
-        ORDER BY rank LIMIT :limit
-        """,
-    )
-    suspend fun searchFts(query: String, limit: Int): List<DrugEntity>
+    // NOTE: the FTS search lives in the [searchFts] extension below, not
+    // as an @Query: Room's static verifier rejects the FTS `rank` column
+    // in JOINs ("no such column: rank"), while SQLite FTS4 supports it
+    // at runtime. Ranking matters because LIMIT cuts large prefix
+    // candidate sets before the repository re-scores them.
 
     /** Filtered/sorted/paged browse; SQL is built by the repository. */
     @RawQuery(observedEntities = [DrugEntity::class])
@@ -103,3 +98,19 @@ interface DrugDao {
     @Query("SELECT id, barcode, regNo, tradeNorm, strength FROM drugs WHERE deletedAt IS NULL")
     suspend fun allKeys(): List<DrugKey>
 }
+
+/**
+ * Prefix full-text search over the denormalized search column, ranked
+ * by FTS4 `rank`. Runs as a RawQuery (see the NOTE above) with bound
+ * arguments; the MATCH string is built by the repository.
+ */
+suspend fun DrugDao.searchFts(query: String, limit: Int): List<DrugEntity> =
+    listRaw(
+        androidx.sqlite.db.SimpleSQLiteQuery(
+            "SELECT drugs.* FROM drugs " +
+                "JOIN drugs_fts ON drugs.rowid = drugs_fts.docid " +
+                "WHERE drugs_fts MATCH ? AND drugs.deletedAt IS NULL " +
+                "ORDER BY rank LIMIT ?",
+            arrayOf(query, limit),
+        ),
+    )
