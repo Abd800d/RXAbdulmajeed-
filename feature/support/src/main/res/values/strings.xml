@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="support_title">تواصل معنا</string>
+    <string name="support_doctor">Dr. Abdulmajeed Almakhedhi</string>
+    <string name="support_role">مطوّر التطبيق</string>
+    <string name="support_whatsapp">واتساب</string>
+    <string name="support_whatsapp_number">+967 781 733 795</string>
+    <string name="support_email">البريد الإلكتروني</string>
+    <string name="support_email_address">7a8b1d@gmail.com</string>
+    <string name="support_version">الإصدار %1$s</string>
+    <string name="support_wa_text">مرحباً دكتور، أستخدم تطبيق قارئ الوصفات (الإصدار %1$s) وأحتاج مساعدة:</string>
+    <string name="support_email_subject">مساعدة في تطبيق قارئ الوصفات</string>
+    <string name="support_email_body">الإصدار: %1$s\nنوع الجهاز: \n\nاشرح مشكلتك هنا:</string>
+    <string name="cd_back">رجوع</string>
+</resources>

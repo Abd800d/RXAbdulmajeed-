@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="support_title">Contact us</string>
+    <string name="support_doctor">Dr. Abdulmajeed Almakhedhi</string>
+    <string name="support_role">App developer</string>
+    <string name="support_whatsapp">WhatsApp</string>
+    <string name="support_whatsapp_number">+967 781 733 795</string>
+    <string name="support_email">Email</string>
+    <string name="support_email_address">7a8b1d@gmail.com</string>
+    <string name="support_version">Version %1$s</string>
+    <string name="support_wa_text">Hello Doctor, I\'m using Rx Reader (version %1$s) and need help:</string>
+    <string name="support_email_subject">Help with the Rx Reader app</string>
+    <string name="support_email_body">Version: %1$s\nDevice: \n\nDescribe your issue here:</string>
+    <string name="cd_back">Back</string>
+</resources>

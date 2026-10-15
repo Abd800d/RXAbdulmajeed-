@@ -4,10 +4,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.almakhedhi.rxreader.core.auth.AuthRepository
 import com.almakhedhi.rxreader.core.designsystem.theme.RxReaderTheme
 import com.almakhedhi.rxreader.ui.MainScreen
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var authRepository: AuthRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Replace the splash theme (set in the manifest) with the normal theme.
@@ -15,7 +23,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             RxReaderTheme {
-                MainScreen()
+                MainScreen(authRepository = authRepository)
             }
         }
     }

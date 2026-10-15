@@ -14,5 +14,8 @@ dependencyResolutionManagement {
 }
 rootProject.name = "RxReader"
 include(":app")
+include(":core:auth")
 include(":core:designsystem")
+include(":feature:auth")
 include(":feature:home")
+include(":feature:support")

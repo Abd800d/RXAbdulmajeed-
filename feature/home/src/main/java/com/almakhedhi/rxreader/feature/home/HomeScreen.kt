@@ -72,6 +72,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.almakhedhi.rxreader.core.designsystem.components.EcgLine
+import com.almakhedhi.rxreader.core.designsystem.components.GradientButton
 import com.almakhedhi.rxreader.core.designsystem.theme.CardOutline
 import com.almakhedhi.rxreader.core.designsystem.theme.GoldAccent
 import com.almakhedhi.rxreader.core.designsystem.theme.InkMuted

@@ -1,4 +1,4 @@
-package com.almakhedhi.rxreader.feature.home
+package com.almakhedhi.rxreader.core.designsystem.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -39,16 +40,21 @@ fun GradientButton(
     icon: ImageVector,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    loading: Boolean = false,
 ) {
     val shape = RoundedCornerShape(18.dp)
     Button(
         onClick = onClick,
         modifier = modifier.height(56.dp),
         shape = shape,
+        enabled = enabled && !loading,
         contentPadding = PaddingValues(0.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Transparent,
             contentColor = Color.White,
+            disabledContainerColor = Color.Transparent,
+            disabledContentColor = Color.White.copy(alpha = 0.7f),
         ),
     ) {
         Box(
@@ -60,24 +66,32 @@ fun GradientButton(
                 ),
             contentAlignment = Alignment.Center,
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    modifier = Modifier.size(22.dp),
+            if (loading) {
+                CircularProgressIndicator(
+                    color = Color.White,
+                    strokeWidth = 3.dp,
+                    modifier = Modifier.size(26.dp),
                 )
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(
-                    text = text,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                )
+            } else {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(22.dp),
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text(
+                        text = text,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
             }
         }
     }
 }
 
-/** Decorative ECG heartbeat line used in the hero banner and footer. */
+/** Decorative ECG heartbeat line used in the hero banner and footers. */
 @Composable
 fun EcgLine(
     modifier: Modifier = Modifier,

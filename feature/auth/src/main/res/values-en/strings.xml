@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="auth_title_login">Sign in</string>
+    <string name="auth_sub_login">Welcome back to Rx Reader</string>
+    <string name="auth_title_register">Create account</string>
+    <string name="auth_sub_register">Create your account to get started</string>
+    <string name="auth_title_forgot">Reset password</string>
+    <string name="auth_sub_forgot">Enter your email and we\'ll send you a reset link</string>
+    <string name="auth_name">Full name</string>
+    <string name="auth_email">Email</string>
+    <string name="auth_password">Password</string>
+    <string name="auth_confirm">Confirm password</string>
+    <string name="auth_login_btn">Sign in</string>
+    <string name="auth_register_btn">Create account</string>
+    <string name="auth_send_btn">Send link</string>
+    <string name="auth_google_btn">Continue with Google</string>
+    <string name="auth_or">or</string>
+    <string name="auth_no_account">No account yet?</string>
+    <string name="auth_create_link">Create one</string>
+    <string name="auth_have_account">Already have an account?</string>
+    <string name="auth_login_link">Sign in</string>
+    <string name="auth_forgot_link">Forgot password?</string>
+    <string name="auth_back_login">Back to sign in</string>
+    <string name="auth_contact">Contact us</string>
+    <string name="auth_reset_sent">Reset link sent to your email</string>
+    <string name="auth_error_email">Enter a valid email address</string>
+    <string name="auth_error_password">Password must be at least 6 characters</string>
+    <string name="auth_error_mismatch">Passwords do not match</string>
+    <string name="auth_error_not_configured">Firebase is not linked yet — sign-in will work after the project setup</string>
+    <string name="auth_error_invalid">Wrong email or password</string>
+    <string name="auth_error_no_account">No account with this email</string>
+    <string name="auth_error_exists">This email is already registered — please sign in</string>
+    <string name="auth_error_weak">Weak password — use at least 6 characters</string>
+    <string name="auth_error_network">Can\'t connect — check your internet</string>
+    <string name="auth_error_generic">Something went wrong — try again</string>
+    <string name="cd_show">Show password</string>
+    <string name="cd_hide">Hide password</string>
+</resources>

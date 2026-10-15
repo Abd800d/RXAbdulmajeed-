@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="auth_title_login">تسجيل الدخول</string>
+    <string name="auth_sub_login">مرحباً بعودتك إلى قارئ الوصفات الطبية</string>
+    <string name="auth_title_register">إنشاء حساب</string>
+    <string name="auth_sub_register">أنشئ حسابك للبدء</string>
+    <string name="auth_title_forgot">استعادة كلمة المرور</string>
+    <string name="auth_sub_forgot">أدخل بريدك وسنرسل لك رابط الاستعادة</string>
+    <string name="auth_name">الاسم الكامل</string>
+    <string name="auth_email">البريد الإلكتروني</string>
+    <string name="auth_password">كلمة المرور</string>
+    <string name="auth_confirm">تأكيد كلمة المرور</string>
+    <string name="auth_login_btn">دخول</string>
+    <string name="auth_register_btn">إنشاء الحساب</string>
+    <string name="auth_send_btn">إرسال الرابط</string>
+    <string name="auth_google_btn">المتابعة بحساب Google</string>
+    <string name="auth_or">أو</string>
+    <string name="auth_no_account">ليس لديك حساب؟</string>
+    <string name="auth_create_link">إنشاء حساب</string>
+    <string name="auth_have_account">لديك حساب؟</string>
+    <string name="auth_login_link">تسجيل الدخول</string>
+    <string name="auth_forgot_link">نسيت كلمة المرور؟</string>
+    <string name="auth_back_login">العودة لتسجيل الدخول</string>
+    <string name="auth_contact">تواصل معنا</string>
+    <string name="auth_reset_sent">تم إرسال رابط الاستعادة إلى بريدك</string>
+    <string name="auth_error_email">أدخل بريداً إلكترونياً صحيحاً</string>
+    <string name="auth_error_password">كلمة المرور 6 أحرف على الأقل</string>
+    <string name="auth_error_mismatch">كلمتا المرور غير متطابقتين</string>
+    <string name="auth_error_not_configured">لم يتم ربط Firebase بعد — سيعمل الدخول بعد إعداد المشروع</string>
+    <string name="auth_error_invalid">البريد أو كلمة المرور غير صحيحة</string>
+    <string name="auth_error_no_account">لا يوجد حساب بهذا البريد</string>
+    <string name="auth_error_exists">هذا البريد مسجل مسبقاً — سجل الدخول</string>
+    <string name="auth_error_weak">كلمة المرور ضعيفة — استخدم 6 أحرف على الأقل</string>
+    <string name="auth_error_network">تعذر الاتصال — تحقق من الإنترنت</string>
+    <string name="auth_error_generic">حدث خطأ — حاول مجدداً</string>
+    <string name="cd_show">إظهار كلمة المرور</string>
+    <string name="cd_hide">إخفاء كلمة المرور</string>
+</resources>
