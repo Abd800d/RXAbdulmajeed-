@@ -7,7 +7,7 @@ import androidx.sqlite.db.SupportSQLiteQuery
 data class DrugFilter(
     val therapeutic: String? = null,
     val form: String? = null,
-    val val manufacturer: String? = null,
+    val manufacturer: String? = null,
     val incompleteOnly: Boolean = false,
     val reviewed: Boolean? = null,
     val sort: DrugSort = DrugSort.NAME,

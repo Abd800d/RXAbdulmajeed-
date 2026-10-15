@@ -111,6 +111,6 @@ suspend fun DrugDao.searchFts(query: String, limit: Int): List<DrugEntity> =
                 "JOIN drugs_fts ON drugs.rowid = drugs_fts.docid " +
                 "WHERE drugs_fts MATCH ? AND drugs.deletedAt IS NULL " +
                 "ORDER BY rank LIMIT ?",
-            arrayOf(query, limit),
+            arrayOf<Any?>(query, limit),
         ),
     )
