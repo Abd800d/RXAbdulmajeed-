@@ -25,8 +25,10 @@ android {
 
 dependencies {
     implementation(project(":core:matching"))
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
+    // api: downstream modules (files, data) use RoomDatabase,
+    // withTransaction, and SupportSQLiteQuery in their own code.
+    api(libs.androidx.room.runtime)
+    api(libs.androidx.room.ktx)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.hilt.android)
     ksp(libs.androidx.room.compiler)
