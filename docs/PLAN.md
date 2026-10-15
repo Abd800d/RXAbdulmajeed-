@@ -5,7 +5,7 @@
 </p>
 
 > **إعداد: د. عبدالمجيد الماخذي — Prepared by Dr. Abdulmajeed Almakhedhi**
-> نسخة الخطة: 1.0 · التاريخ: أكتوبر 2026 · المنصة: Android
+> نسخة الخطة: 1.1 · التاريخ: أكتوبر 2026 (تعديل 15 أكتوبر: تصحيح فقرة التنقل في 14.3 بعد مطابقة التصميم المرجعي) · المنصة: Android
 > «Your Health • Our Priority» · «Medicine • Knowledge • Safety»
 
 ---

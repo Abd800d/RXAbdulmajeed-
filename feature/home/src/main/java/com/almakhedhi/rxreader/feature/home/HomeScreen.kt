@@ -1,6 +1,7 @@
 package com.almakhedhi.rxreader.feature.home
 
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,12 +32,10 @@ import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Image as GalleryIcon
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ReceiptLong
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.BorderStroke
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -386,7 +385,7 @@ private fun ActionRow(
         ActionCard(
             title = stringResource(R.string.action_gallery_title),
             subtitle = stringResource(R.string.action_gallery_sub),
-            icon = GalleryIcon,
+            icon = Icons.Filled.Image,
             contentDescription = stringResource(R.string.cd_gallery),
             onClick = onGalleryClick,
             modifier = Modifier
