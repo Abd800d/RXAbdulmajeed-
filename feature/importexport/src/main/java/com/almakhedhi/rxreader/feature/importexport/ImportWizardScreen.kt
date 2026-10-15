@@ -72,7 +72,7 @@ import com.almakhedhi.rxreader.core.designsystem.theme.TealContainer
 import com.almakhedhi.rxreader.core.designsystem.theme.TealDark
 import com.almakhedhi.rxreader.core.designsystem.theme.TealPrimary
 import com.almakhedhi.rxreader.core.files.columns.DrugColumns
-import com.almakhedhi.rxreader.core.files.import.ImportEngine
+import com.almakhedhi.rxreader.core.files.ingest.ImportEngine
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

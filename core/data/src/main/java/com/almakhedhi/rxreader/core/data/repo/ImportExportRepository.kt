@@ -6,7 +6,7 @@ import com.almakhedhi.rxreader.core.database.entity.ImportJobEntity
 import com.almakhedhi.rxreader.core.files.columns.DrugColumns
 import com.almakhedhi.rxreader.core.files.csv.CsvCodec
 import com.almakhedhi.rxreader.core.files.export.ExportEngine
-import com.almakhedhi.rxreader.core.files.import.ImportEngine
+import com.almakhedhi.rxreader.core.files.ingest.ImportEngine
 import com.almakhedhi.rxreader.core.files.json.JsonDrug
 import com.almakhedhi.rxreader.core.files.json.JsonDrugCodec
 import com.almakhedhi.rxreader.core.files.templates.Templates

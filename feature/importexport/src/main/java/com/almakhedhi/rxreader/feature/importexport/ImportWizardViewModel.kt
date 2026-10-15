@@ -6,7 +6,7 @@ import com.almakhedhi.rxreader.core.data.repo.ImportExportRepository
 import com.almakhedhi.rxreader.core.database.entity.ImportJobEntity
 import com.almakhedhi.rxreader.core.files.columns.DrugColumns
 import com.almakhedhi.rxreader.core.files.csv.CsvCodec
-import com.almakhedhi.rxreader.core.files.import.ImportEngine
+import com.almakhedhi.rxreader.core.files.ingest.ImportEngine
 import com.almakhedhi.rxreader.core.files.json.JsonDrug
 import com.almakhedhi.rxreader.core.files.json.JsonDrugCodec.toFieldMap
 import dagger.hilt.android.lifecycle.HiltViewModel

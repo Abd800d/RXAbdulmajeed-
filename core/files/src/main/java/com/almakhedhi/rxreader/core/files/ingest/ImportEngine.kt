@@ -1,4 +1,4 @@
-package com.almakhedhi.rxreader.core.files.import
+package com.almakhedhi.rxreader.core.files.ingest
 
 import androidx.room.withTransaction
 import com.almakhedhi.rxreader.core.database.RxDatabase
