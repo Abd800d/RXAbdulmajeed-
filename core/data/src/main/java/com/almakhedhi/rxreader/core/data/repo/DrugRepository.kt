@@ -10,6 +10,7 @@ import com.almakhedhi.rxreader.core.database.dao.DrugAliasDao
 import com.almakhedhi.rxreader.core.database.dao.DrugFilter
 import com.almakhedhi.rxreader.core.database.dao.DrugImageDao
 import com.almakhedhi.rxreader.core.database.dao.DrugQuery
+import com.almakhedhi.rxreader.core.database.dao.searchFts
 import com.almakhedhi.rxreader.core.database.entity.DrugAliasEntity
 import com.almakhedhi.rxreader.core.database.entity.DrugEntity
 import com.almakhedhi.rxreader.core.database.entity.DrugImageEntity
