@@ -140,8 +140,10 @@ fun MainScreen(
                     route = ROUTE_ANALYZING,
                     arguments = listOf(navArgument(ARG_IMAGE_URI) { type = NavType.StringType }),
                 ) { entry ->
-                    val viewModel: ScanViewModel =
-                        hiltViewModel(navController.getBackStackEntry(ROUTE_SCAN_GRAPH))
+                    val parentEntry = remember(entry) {
+                        navController.getBackStackEntry(ROUTE_SCAN_GRAPH)
+                    }
+                    val viewModel: ScanViewModel = hiltViewModel(parentEntry)
                     AnalyzingScreen(
                         imageUri = Uri.decode(entry.arguments?.getString(ARG_IMAGE_URI) ?: ""),
                         viewModel = viewModel,
@@ -177,9 +179,11 @@ fun MainScreen(
                         onBack = { navController.popBackStack() },
                     )
                 }
-                composable(ROUTE_RESULT) {
-                    val viewModel: ScanViewModel =
-                        hiltViewModel(navController.getBackStackEntry(ROUTE_SCAN_GRAPH))
+                composable(ROUTE_RESULT) { backStackEntry ->
+                    val parentEntry = remember(backStackEntry) {
+                        navController.getBackStackEntry(ROUTE_SCAN_GRAPH)
+                    }
+                    val viewModel: ScanViewModel = hiltViewModel(parentEntry)
                     ResultScreen(
                         viewModel = viewModel,
                         onDone = { navController.popBackStack(ROUTE_HOME, false) },
