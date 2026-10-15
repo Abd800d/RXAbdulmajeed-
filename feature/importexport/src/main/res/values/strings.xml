@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Wizard -->
+    <string name="wizard_title">استيراد الأدوية</string>
+    <string name="wizard_back">رجوع</string>
+    <string name="wizard_next">التالي</string>
+    <string name="wizard_step_source">المصدر</string>
+    <string name="wizard_step_format">الصيغة</string>
+    <string name="wizard_step_mapping">ربط الأعمدة</string>
+    <string name="wizard_step_validation">التحقق</string>
+    <string name="wizard_step_progress">الاستيراد</string>
+
+    <!-- Step 1: source -->
+    <string name="src_pick">اختيار ملف (CSV / Excel / JSON)</string>
+    <string name="src_pick_hint">من الجهاز أو Google Drive — حتى 64MB</string>
+    <string name="src_sheets_label">أو رابط جدول Google Sheets منشور كـ CSV</string>
+    <string name="src_sheets_hint">الصق رابط CSV…</string>
+    <string name="src_sheets_load">تحميل</string>
+    <string name="src_recent">عمليات سابقة</string>
+    <string name="src_recent_empty">لا توجد عمليات استيراد بعد.</string>
+    <string name="src_recent_row">%1$s — أُضيف %2$d، حُدِّث %3$d، أخطاء %4$d</string>
+
+    <!-- Step 2: format -->
+    <string name="fmt_file">الملف: %1$s</string>
+    <string name="fmt_detected">الصيغة المكتشفة: %1$s</string>
+    <string name="fmt_rows">عدد الصفوف: %1$d</string>
+    <string name="fmt_encoding">الترميز</string>
+    <string name="fmt_encoding_auto">تلقائي (%1$s)</string>
+    <string name="fmt_delimiter">الفاصل</string>
+    <string name="fmt_delimiter_auto">تلقائي</string>
+    <string name="fmt_sheet">الورقة</string>
+    <string name="fmt_json_info">ملف JSON بالمخطط رقم %1$d — يُتجاوز ربط الأعمدة.</string>
+
+    <!-- Step 3: mapping -->
+    <string name="map_hint">اربط كل عمود بحقل الدواء — الأعمدة غير المربوطة تُتجاهل.</string>
+    <string name="map_ignore">تجاهل</string>
+    <string name="map_unmapped">أعمدة غير مربوطة: %1$s</string>
+    <string name="map_preview">معاينة أول 20 صفاً</string>
+    <string name="map_need_name">يجب ربط اسم واحد على الأقل (تجاري أو علمي).</string>
+
+    <!-- Step 4: validation -->
+    <string name="val_total">إجمالي الصفوف: %1$d</string>
+    <string name="val_new">جديد: %1$d</string>
+    <string name="val_duplicates">مكرر: %1$d</string>
+    <string name="val_invalid">غير صالح: %1$d</string>
+    <string name="val_empty">فارغ: %1$d</string>
+    <string name="val_policy">التعامل مع المكرر</string>
+    <string name="val_policy_skip">تخطٍّ (إبقاء الموجود)</string>
+    <string name="val_policy_update">تحديث (الملف يغلب)</string>
+    <string name="val_policy_merge">دمج (ملء الفارغ فقط)</string>
+    <string name="val_problems">أمثلة على الصفوف غير الصالحة</string>
+    <string name="val_problem_row">صف %1$d: %2$s</string>
+    <string name="val_start">بدء الاستيراد</string>
+
+    <!-- Step 5: progress + report -->
+    <string name="prog_running">جارٍ الاستيراد… %1$d من %2$d</string>
+    <string name="rep_done">اكتمل الاستيراد في %1$d ثانية</string>
+    <string name="rep_added">أُضيف: %1$d</string>
+    <string name="rep_updated">حُدِّث: %1$d</string>
+    <string name="rep_skipped">تُخطّي: %1$d</string>
+    <string name="rep_errors">أخطاء: %1$d</string>
+    <string name="rep_save_errors">حفظ ملف الأخطاء (CSV)</string>
+    <string name="rep_errors_saved">حُفظ ملف الأخطاء.</string>
+    <string name="rep_new">استيراد جديد</string>
+    <string name="rep_done_button">تم</string>
+
+    <!-- Errors -->
+    <string name="err_too_big">الملف أكبر من 64MB.</string>
+    <string name="err_unreadable">تعذّر قراءة الملف.</string>
+    <string name="err_empty">الملف فارغ أو بلا أعمدة.</string>
+    <string name="err_no_names">لا يوجد عمود اسم مربوط.</string>
+    <string name="err_network">تعذّر تحميل الرابط — تحقق من الإنترنت والرابط.</string>
+    <string name="err_json">ملف JSON غير صالح.</string>
+
+    <!-- Export -->
+    <string name="exp_title">التصدير والقوالب</string>
+    <string name="exp_scope">النطاق</string>
+    <string name="exp_all">كل الأصناف</string>
+    <string name="exp_count">عدد الأصناف: %1$d</string>
+    <string name="exp_format">الصيغة</string>
+    <string name="exp_csv">CSV (عربي متوافق مع Excel)</string>
+    <string name="exp_xlsx">Excel (xlsx)</string>
+    <string name="exp_json">JSON</string>
+    <string name="exp_zip">نسخة ZIP كاملة</string>
+    <string name="exp_start">تصدير وحفظ</string>
+    <string name="exp_working">جارٍ التصدير…</string>
+    <string name="exp_done">تم التصدير بنجاح.</string>
+    <string name="exp_templates">قوالب الاستيراد</string>
+    <string name="exp_templates_hint">ملفات نموذجية بالعناوين العربية وصفّين تجريبيين.</string>
+    <string name="exp_template_saved">حُفظ القالب.</string>
+    <string name="exp_f_therapeutic">الفئة العلاجية</string>
+    <string name="exp_f_form">الشكل الصيدلاني</string>
+    <string name="exp_f_manufacturer">الشركة المصنعة</string>
+    <string name="exp_incomplete">غير مكتملة فقط</string>
+</resources>

@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Medication
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.ReceiptLong
@@ -86,14 +87,28 @@ import com.almakhedhi.rxreader.core.designsystem.theme.TealGradientEnd
 import com.almakhedhi.rxreader.core.designsystem.theme.TealGradientStart
 import com.almakhedhi.rxreader.core.designsystem.theme.TealPrimary
 
+/** One recent prescription row, pre-formatted by the caller. */
+data class RecentRx(
+    val id: Long,
+    val title: String,
+    val subtitle: String,
+)
+
 /**
- * Home screen matching the reference design. The scan and gallery cards
- * launch the real capture flow; other actions arrive in later phases.
+ * Home screen matching the reference design. Search opens the drug
+ * catalog, the recents card shows real saved prescriptions, and the
+ * catalog card opens the full drug database.
  */
 @Composable
 fun HomeScreen(
     onScanClick: () -> Unit,
     onGalleryClick: () -> Unit,
+    onSearch: (String) -> Unit,
+    onCatalogClick: () -> Unit,
+    onHistoryClick: () -> Unit,
+    recent: List<RecentRx>,
+    onRecentClick: (Long) -> Unit,
+    onViewAllHistory: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
@@ -109,11 +124,16 @@ fun HomeScreen(
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
-        HomeHeader(onHistoryClick = soon, onSettingsClick = soon)
+        HomeHeader(onHistoryClick = onHistoryClick, onSettingsClick = soon)
         HeroCard()
-        SearchCard(onSearch = soon)
+        SearchCard(onSearch = onSearch)
         ActionRow(onScanClick = onScanClick, onGalleryClick = onGalleryClick)
-        RecentCard(onViewAllClick = soon, onItemClick = soon)
+        CatalogCard(onClick = onCatalogClick)
+        RecentCard(
+            recent = recent,
+            onViewAllClick = onViewAllHistory,
+            onItemClick = onRecentClick,
+        )
         HomeFooter()
         Spacer(modifier = Modifier.height(8.dp))
     }
@@ -324,7 +344,7 @@ private fun HeroCard() {
 }
 
 @Composable
-private fun SearchCard(onSearch: () -> Unit) {
+private fun SearchCard(onSearch: (String) -> Unit) {
     var query by remember { mutableStateOf("") }
     Card(
         shape = RoundedCornerShape(24.dp),
@@ -352,7 +372,7 @@ private fun SearchCard(onSearch: () -> Unit) {
                 shape = RoundedCornerShape(16.dp),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                keyboardActions = KeyboardActions(onSearch = { onSearch() }),
+                keyboardActions = KeyboardActions(onSearch = { onSearch(query) }),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = TealPrimary,
                     unfocusedBorderColor = CardOutline,
@@ -361,7 +381,7 @@ private fun SearchCard(onSearch: () -> Unit) {
             GradientButton(
                 text = stringResource(R.string.search_action),
                 icon = Icons.Filled.Search,
-                onClick = onSearch,
+                onClick = { onSearch(query) },
                 modifier = Modifier.fillMaxWidth(),
             )
         }
@@ -473,15 +493,72 @@ private fun ActionCard(
 }
 
 @Composable
+private fun CatalogCard(onClick: () -> Unit) {
+    Card(
+        onClick = onClick,
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(52.dp)
+                    .background(TealContainer, CircleShape),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Medication,
+                    contentDescription = null,
+                    tint = TealDark,
+                    modifier = Modifier.size(26.dp),
+                )
+            }
+            Spacer(modifier = Modifier.width(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = stringResource(R.string.action_catalog_title),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = InkPrimary,
+                    maxLines = 1,
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = stringResource(R.string.action_catalog_sub),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = InkMuted,
+                    maxLines = 1,
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .size(34.dp)
+                    .background(TealPrimary, CircleShape),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                    contentDescription = stringResource(R.string.cd_open),
+                    tint = Color.White,
+                    modifier = Modifier.size(18.dp),
+                )
+            }
+        }
+    }
+}
+
+@Composable
 private fun RecentCard(
+    recent: List<RecentRx>,
     onViewAllClick: () -> Unit,
-    onItemClick: () -> Unit,
+    onItemClick: (Long) -> Unit,
 ) {
-    val items = listOf(
-        R.string.rx1_name to R.string.rx1_date,
-        R.string.rx2_name to R.string.rx2_date,
-        R.string.rx3_name to R.string.rx3_date,
-    )
     Card(
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -531,58 +608,67 @@ private fun RecentCard(
                 }
             }
             Spacer(modifier = Modifier.height(4.dp))
-            items.forEachIndexed { index, (nameRes, dateRes) ->
-                if (index > 0) {
-                    HorizontalDivider(
-                        modifier = Modifier.padding(vertical = 10.dp),
-                        color = CardOutline,
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .clickable(onClick = onItemClick)
-                        .padding(vertical = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Box(
+            if (recent.isEmpty()) {
+                Text(
+                    text = stringResource(R.string.recent_empty),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = InkMuted,
+                    modifier = Modifier.padding(vertical = 8.dp),
+                )
+            } else {
+                recent.forEachIndexed { index, item ->
+                    if (index > 0) {
+                        HorizontalDivider(
+                            modifier = Modifier.padding(vertical = 10.dp),
+                            color = CardOutline,
+                        )
+                    }
+                    Row(
                         modifier = Modifier
-                            .size(48.dp)
-                            .background(TealContainer, CircleShape),
-                        contentAlignment = Alignment.Center,
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                            .clickable(onClick = { onItemClick(item.id) })
+                            .padding(vertical = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
+                        Box(
+                            modifier = Modifier
+                                .size(48.dp)
+                                .background(TealContainer, CircleShape),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Description,
+                                contentDescription = stringResource(R.string.cd_doc),
+                                tint = TealDark,
+                                modifier = Modifier.size(24.dp),
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = item.title,
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = InkPrimary,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = item.subtitle,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = InkMuted,
+                                maxLines = 1,
+                            )
+                        }
                         Icon(
-                            imageVector = Icons.Filled.Description,
-                            contentDescription = stringResource(R.string.cd_doc),
-                            tint = TealDark,
-                            modifier = Modifier.size(24.dp),
+                            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                            contentDescription = stringResource(R.string.cd_open),
+                            tint = InkMuted,
+                            modifier = Modifier.size(20.dp),
                         )
                     }
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = stringResource(nameRes),
-                            style = MaterialTheme.typography.titleSmall,
-                            fontWeight = FontWeight.Bold,
-                            color = InkPrimary,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                        Spacer(modifier = Modifier.height(2.dp))
-                        Text(
-                            text = stringResource(dateRes),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = InkMuted,
-                            maxLines = 1,
-                        )
-                    }
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                        contentDescription = stringResource(R.string.cd_open),
-                        tint = InkMuted,
-                        modifier = Modifier.size(20.dp),
-                    )
                 }
             }
         }
@@ -664,6 +750,17 @@ private fun HomeFooter() {
 @Composable
 private fun HomeScreenPreview() {
     RxReaderTheme {
-        HomeScreen(onScanClick = {}, onGalleryClick = {})
+        HomeScreen(
+            onScanClick = {},
+            onGalleryClick = {},
+            onSearch = {},
+            onCatalogClick = {},
+            onHistoryClick = {},
+            recent = listOf(
+                RecentRx(1, "2026-10-16 15:30", "3 items"),
+            ),
+            onRecentClick = {},
+            onViewAllHistory = {},
+        )
     }
 }

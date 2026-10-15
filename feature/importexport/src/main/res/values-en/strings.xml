@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Wizard -->
+    <string name="wizard_title">Import drugs</string>
+    <string name="wizard_back">Back</string>
+    <string name="wizard_next">Next</string>
+    <string name="wizard_step_source">Source</string>
+    <string name="wizard_step_format">Format</string>
+    <string name="wizard_step_mapping">Columns</string>
+    <string name="wizard_step_validation">Check</string>
+    <string name="wizard_step_progress">Import</string>
+
+    <!-- Step 1: source -->
+    <string name="src_pick">Pick a file (CSV / Excel / JSON)</string>
+    <string name="src_pick_hint">From device or Google Drive — up to 64MB</string>
+    <string name="src_sheets_label">Or a Google Sheets link published as CSV</string>
+    <string name="src_sheets_hint">Paste CSV link…</string>
+    <string name="src_sheets_load">Load</string>
+    <string name="src_recent">Previous runs</string>
+    <string name="src_recent_empty">No imports yet.</string>
+    <string name="src_recent_row">%1$s — added %2$d, updated %3$d, errors %4$d</string>
+
+    <!-- Step 2: format -->
+    <string name="fmt_file">File: %1$s</string>
+    <string name="fmt_detected">Detected format: %1$s</string>
+    <string name="fmt_rows">Rows: %1$d</string>
+    <string name="fmt_encoding">Encoding</string>
+    <string name="fmt_encoding_auto">Auto (%1$s)</string>
+    <string name="fmt_delimiter">Delimiter</string>
+    <string name="fmt_delimiter_auto">Auto</string>
+    <string name="fmt_sheet">Sheet</string>
+    <string name="fmt_json_info">JSON file, schema v%1$d — column mapping is skipped.</string>
+
+    <!-- Step 3: mapping -->
+    <string name="map_hint">Map each column to a drug field — unmapped columns are ignored.</string>
+    <string name="map_ignore">Ignore</string>
+    <string name="map_unmapped">Unmapped columns: %1$s</string>
+    <string name="map_preview">First 20 rows preview</string>
+    <string name="map_need_name">Map at least one name (trade or scientific).</string>
+
+    <!-- Step 4: validation -->
+    <string name="val_total">Total rows: %1$d</string>
+    <string name="val_new">New: %1$d</string>
+    <string name="val_duplicates">Duplicates: %1$d</string>
+    <string name="val_invalid">Invalid: %1$d</string>
+    <string name="val_empty">Empty: %1$d</string>
+    <string name="val_policy">On duplicates</string>
+    <string name="val_policy_skip">Skip (keep existing)</string>
+    <string name="val_policy_update">Update (file wins)</string>
+    <string name="val_policy_merge">Merge (fill blanks only)</string>
+    <string name="val_problems">Sample invalid rows</string>
+    <string name="val_problem_row">Row %1$d: %2$s</string>
+    <string name="val_start">Start import</string>
+
+    <!-- Step 5: progress + report -->
+    <string name="prog_running">Importing… %1$d of %2$d</string>
+    <string name="rep_done">Import finished in %1$d seconds</string>
+    <string name="rep_added">Added: %1$d</string>
+    <string name="rep_updated">Updated: %1$d</string>
+    <string name="rep_skipped">Skipped: %1$d</string>
+    <string name="rep_errors">Errors: %1$d</string>
+    <string name="rep_save_errors">Save error file (CSV)</string>
+    <string name="rep_errors_saved">Error file saved.</string>
+    <string name="rep_new">New import</string>
+    <string name="rep_done_button">Done</string>
+
+    <!-- Errors -->
+    <string name="err_too_big">File exceeds 64MB.</string>
+    <string name="err_unreadable">Could not read the file.</string>
+    <string name="err_empty">File is empty or has no columns.</string>
+    <string name="err_no_names">No name column is mapped.</string>
+    <string name="err_network">Could not load the link — check connection and URL.</string>
+    <string name="err_json">Invalid JSON file.</string>
+
+    <!-- Export -->
+    <string name="exp_title">Export and templates</string>
+    <string name="exp_scope">Scope</string>
+    <string name="exp_all">All items</string>
+    <string name="exp_count">Items: %1$d</string>
+    <string name="exp_format">Format</string>
+    <string name="exp_csv">CSV (Excel-friendly Arabic)</string>
+    <string name="exp_xlsx">Excel (xlsx)</string>
+    <string name="exp_json">JSON</string>
+    <string name="exp_zip">Full ZIP backup</string>
+    <string name="exp_start">Export and save</string>
+    <string name="exp_working">Exporting…</string>
+    <string name="exp_done">Exported successfully.</string>
+    <string name="exp_templates">Import templates</string>
+    <string name="exp_templates_hint">Sample files with Arabic headers and two demo rows.</string>
+    <string name="exp_template_saved">Template saved.</string>
+    <string name="exp_f_therapeutic">Therapeutic class</string>
+    <string name="exp_f_form">Dosage form</string>
+    <string name="exp_f_manufacturer">Manufacturer</string>
+    <string name="exp_incomplete">Incomplete only</string>
+</resources>

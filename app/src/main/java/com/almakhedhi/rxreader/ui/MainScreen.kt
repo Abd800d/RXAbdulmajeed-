@@ -21,6 +21,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -29,10 +30,28 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.almakhedhi.rxreader.BuildConfig
+import com.almakhedhi.rxreader.R
 import com.almakhedhi.rxreader.core.auth.AuthRepository
 import com.almakhedhi.rxreader.core.scanner.ScannerHelper
 import com.almakhedhi.rxreader.feature.auth.AuthRoute
+import com.almakhedhi.rxreader.feature.drugs.DrugDetailScreen
+import com.almakhedhi.rxreader.feature.drugs.DrugDetailViewModel
+import com.almakhedhi.rxreader.feature.drugs.DrugEditorScreen
+import com.almakhedhi.rxreader.feature.drugs.DrugEditorViewModel
+import com.almakhedhi.rxreader.feature.drugs.DrugListScreen
+import com.almakhedhi.rxreader.feature.drugs.DrugListViewModel
+import com.almakhedhi.rxreader.feature.drugs.TrashScreen
+import com.almakhedhi.rxreader.feature.drugs.TrashViewModel
+import com.almakhedhi.rxreader.feature.history.HistoryDetailScreen
+import com.almakhedhi.rxreader.feature.history.HistoryDetailViewModel
+import com.almakhedhi.rxreader.feature.history.HistoryScreen
+import com.almakhedhi.rxreader.feature.history.HistoryViewModel
 import com.almakhedhi.rxreader.feature.home.HomeScreen
+import com.almakhedhi.rxreader.feature.home.RecentRx
+import com.almakhedhi.rxreader.feature.importexport.ExportScreen
+import com.almakhedhi.rxreader.feature.importexport.ExportViewModel
+import com.almakhedhi.rxreader.feature.importexport.ImportWizardScreen
+import com.almakhedhi.rxreader.feature.importexport.ImportWizardViewModel
 import com.almakhedhi.rxreader.feature.scan.AnalyzingScreen
 import com.almakhedhi.rxreader.feature.scan.CameraScreen
 import com.almakhedhi.rxreader.feature.scan.CropScreen
@@ -40,6 +59,9 @@ import com.almakhedhi.rxreader.feature.scan.ResultScreen
 import com.almakhedhi.rxreader.feature.scan.ScanViewModel
 import com.almakhedhi.rxreader.feature.support.ContactScreen
 import com.google.mlkit.vision.documentscanner.GmsDocumentScanningResult
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlinx.coroutines.launch
 
 private const val ROUTE_AUTH = "auth"
@@ -51,6 +73,17 @@ private const val ROUTE_CROP = "crop/{imageUri}"
 private const val ROUTE_CAMERA = "camera"
 private const val ROUTE_RESULT = "result"
 private const val ARG_IMAGE_URI = "imageUri"
+private const val ROUTE_DRUGS = "drugs?query={query}"
+private const val ROUTE_DRUG_DETAIL = "drug/{drugId}"
+private const val ROUTE_DRUG_EDIT = "drugEdit?drugId={drugId}"
+private const val ROUTE_TRASH = "drugsTrash"
+private const val ROUTE_IMPORT = "import"
+private const val ROUTE_EXPORT = "export"
+private const val ROUTE_HISTORY = "history"
+private const val ROUTE_HISTORY_DETAIL = "history/{prescriptionId}"
+private const val ARG_QUERY = "query"
+private const val ARG_DRUG_ID = "drugId"
+private const val ARG_PRESCRIPTION_ID = "prescriptionId"
 
 /**
  * App entry screen: auth gate + navigation graph. Owns the document-scanner
@@ -120,6 +153,9 @@ fun MainScreen(
                 AuthRoute(onContactClick = { navController.navigate(ROUTE_SUPPORT) })
             }
             composable(ROUTE_HOME) {
+                val homeViewModel: HomeViewModel = hiltViewModel()
+                val recentSummaries by homeViewModel.recent.collectAsState()
+                val linesTemplate = stringResource(R.string.recent_lines)
                 HomeScreen(
                     onScanClick = launchScanner,
                     onGalleryClick = {
@@ -127,11 +163,122 @@ fun MainScreen(
                             PickVisualMediaRequest(PickVisualMedia.ImageOnly),
                         )
                     },
+                    onSearch = { query ->
+                        navController.navigate("drugs?query=${Uri.encode(query)}")
+                    },
+                    onCatalogClick = { navController.navigate("drugs") },
+                    onHistoryClick = { navController.navigate(ROUTE_HISTORY) },
+                    recent = recentSummaries.map { summary ->
+                        RecentRx(
+                            id = summary.id,
+                            title = formatDateTime(summary.createdAt),
+                            subtitle = listOfNotNull(
+                                summary.doctor?.takeIf { it.isNotBlank() },
+                                linesTemplate.format(summary.itemCount),
+                            ).joinToString(" · "),
+                        )
+                    },
+                    onRecentClick = { id -> navController.navigate("history/$id") },
+                    onViewAllHistory = { navController.navigate(ROUTE_HISTORY) },
                 )
             }
             composable(ROUTE_SUPPORT) {
                 ContactScreen(
                     appVersion = BuildConfig.VERSION_NAME,
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable(
+                route = ROUTE_DRUGS,
+                arguments = listOf(
+                    navArgument(ARG_QUERY) {
+                        type = NavType.StringType
+                        defaultValue = ""
+                    },
+                ),
+            ) { entry ->
+                val viewModel: DrugListViewModel = hiltViewModel()
+                DrugListScreen(
+                    viewModel = viewModel,
+                    initialQuery = Uri.decode(entry.arguments?.getString(ARG_QUERY) ?: ""),
+                    onDrugClick = { id -> navController.navigate("drug/$id") },
+                    onAddClick = { navController.navigate("drugEdit?drugId=-1") },
+                    onImportClick = { navController.navigate(ROUTE_IMPORT) },
+                    onExportClick = { navController.navigate(ROUTE_EXPORT) },
+                    onTrashClick = { navController.navigate(ROUTE_TRASH) },
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable(
+                route = ROUTE_DRUG_DETAIL,
+                arguments = listOf(navArgument(ARG_DRUG_ID) { type = NavType.LongType }),
+            ) { entry ->
+                val viewModel: DrugDetailViewModel = hiltViewModel()
+                val drugId = entry.arguments?.getLong(ARG_DRUG_ID) ?: -1L
+                DrugDetailScreen(
+                    viewModel = viewModel,
+                    drugId = drugId,
+                    onEdit = { navController.navigate("drugEdit?drugId=$drugId") },
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable(
+                route = ROUTE_DRUG_EDIT,
+                arguments = listOf(
+                    navArgument(ARG_DRUG_ID) {
+                        type = NavType.LongType
+                        defaultValue = -1L
+                    },
+                ),
+            ) { entry ->
+                val viewModel: DrugEditorViewModel = hiltViewModel()
+                DrugEditorScreen(
+                    viewModel = viewModel,
+                    drugId = entry.arguments?.getLong(ARG_DRUG_ID) ?: -1L,
+                    onSaved = { navController.popBackStack() },
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable(ROUTE_TRASH) {
+                val viewModel: TrashViewModel = hiltViewModel()
+                TrashScreen(
+                    viewModel = viewModel,
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable(ROUTE_IMPORT) {
+                val wizardViewModel: ImportWizardViewModel = hiltViewModel()
+                val exportViewModel: ExportViewModel = hiltViewModel()
+                ImportWizardScreen(
+                    viewModel = wizardViewModel,
+                    exportViewModel = exportViewModel,
+                    onDone = { navController.popBackStack() },
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable(ROUTE_EXPORT) {
+                val viewModel: ExportViewModel = hiltViewModel()
+                ExportScreen(
+                    viewModel = viewModel,
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable(ROUTE_HISTORY) {
+                val viewModel: HistoryViewModel = hiltViewModel()
+                HistoryScreen(
+                    viewModel = viewModel,
+                    onPrescriptionClick = { id -> navController.navigate("history/$id") },
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable(
+                route = ROUTE_HISTORY_DETAIL,
+                arguments = listOf(navArgument(ARG_PRESCRIPTION_ID) { type = NavType.LongType }),
+            ) { entry ->
+                val viewModel: HistoryDetailViewModel = hiltViewModel()
+                HistoryDetailScreen(
+                    viewModel = viewModel,
+                    prescriptionId = entry.arguments?.getLong(ARG_PRESCRIPTION_ID) ?: -1L,
                     onBack = { navController.popBackStack() },
                 )
             }
@@ -193,3 +340,6 @@ fun MainScreen(
         }
     }
 }
+
+private fun formatDateTime(epochMillis: Long): String =
+    SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date(epochMillis))

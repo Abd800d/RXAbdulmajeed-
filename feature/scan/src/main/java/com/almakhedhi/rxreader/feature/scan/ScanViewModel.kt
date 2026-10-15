@@ -9,6 +9,7 @@ import com.almakhedhi.rxreader.core.ai.AiNotConfiguredException
 import com.almakhedhi.rxreader.core.ai.AiReader
 import com.almakhedhi.rxreader.core.ai.model.AnalysisResult
 import com.almakhedhi.rxreader.core.ai.model.AnalyzedDrug
+import com.almakhedhi.rxreader.core.data.repo.PrescriptionRepository
 import com.almakhedhi.rxreader.core.scanner.ImagePreprocessor
 import com.almakhedhi.rxreader.core.scanner.QualityCheck
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,6 +39,7 @@ class ScanViewModel @Inject constructor(
     private val reader: AiReader,
     private val preprocessor: ImagePreprocessor,
     private val qualityCheck: QualityCheck,
+    private val prescriptions: PrescriptionRepository,
     @ApplicationContext private val context: Context,
 ) : ViewModel() {
 
@@ -53,6 +55,9 @@ class ScanViewModel @Inject constructor(
 
     private val _confirmed = MutableStateFlow(false)
     val confirmed: StateFlow<Boolean> = _confirmed.asStateFlow()
+
+    private val _savedId = MutableStateFlow<Long?>(null)
+    val savedId: StateFlow<Long?> = _savedId.asStateFlow()
 
     private var startedFor: String? = null
     private var lastUri: String? = null
@@ -73,6 +78,7 @@ class ScanViewModel @Inject constructor(
         lastUri = uriString
         _result.value = null
         _confirmed.value = false
+        _savedId.value = null
         _selectedDrug.value = null
         viewModelScope.launch {
             _analysisState.value = AnalysisUiState.Working
@@ -107,6 +113,7 @@ class ScanViewModel @Inject constructor(
         startedFor = null
         _result.value = null
         pendingBitmap = null
+        _savedId.value = null
         lastUri?.let { startAnalysis(it) }
     }
 
@@ -118,6 +125,7 @@ class ScanViewModel @Inject constructor(
                 onSuccess = {
                     _result.value = it
                     _confirmed.value = false
+                    _savedId.value = null
                     _selectedDrug.value = null
                     _analysisState.value = AnalysisUiState.Done
                 },
@@ -143,8 +151,22 @@ class ScanViewModel @Inject constructor(
         )
     }
 
+    /**
+     * Confirms the review and persists the prescription: the source
+     * image is copied to app files and each line is matched against
+     * the catalog (verified lines become learned aliases).
+     */
     fun confirmAll() {
+        if (_confirmed.value) return
         _confirmed.value = true
+        val current = _result.value ?: return
+        viewModelScope.launch {
+            val imageName = _sourceBitmap?.let { bitmap ->
+                runCatching { prescriptions.saveImage(bitmap) }.getOrNull()
+            }
+            runCatching { prescriptions.saveConfirmed(current, imageName) }
+                .onSuccess { _savedId.value = it }
+        }
     }
 
     private fun Throwable.userMessage(): String =

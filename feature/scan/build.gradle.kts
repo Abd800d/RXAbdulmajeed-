@@ -31,6 +31,7 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:scanner"))
     implementation(project(":core:ai"))
+    implementation(project(":core:data"))
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)

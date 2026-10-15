@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Drug list -->
+    <string name="drugs_title">Drugs</string>
+    <string name="drugs_search_hint">Search trade or scientific name…</string>
+    <string name="drugs_count">%1$d items</string>
+    <string name="drugs_empty">No items yet — add a drug or import a list.</string>
+    <string name="drugs_search_empty">No matches — try another spelling.</string>
+    <string name="drugs_load_more">Load more</string>
+    <string name="drugs_add">Add drug</string>
+    <string name="drugs_import">Import</string>
+    <string name="drugs_export">Export</string>
+    <string name="drugs_trash">Trash</string>
+    <string name="drugs_back">Back</string>
+    <string name="drugs_filters">Filters</string>
+    <string name="drugs_clear_filters">Clear filters</string>
+    <string name="drugs_all">All</string>
+    <string name="drugs_sort">Sort</string>
+    <string name="drugs_sort_name">By name</string>
+    <string name="drugs_sort_updated">Recently updated</string>
+    <string name="drugs_sort_created">Recently added</string>
+    <string name="drugs_reviewed">Reviewed</string>
+    <string name="drugs_unreviewed">Unreviewed</string>
+    <string name="drugs_incomplete">Incomplete data</string>
+    <string name="drugs_price_yer">%1$s YER</string>
+
+    <!-- Detail -->
+    <string name="detail_title">Drug card</string>
+    <string name="detail_edit">Edit</string>
+    <string name="detail_delete">Delete</string>
+    <string name="detail_delete_confirm">The drug moves to trash (kept for 30 days).</string>
+    <string name="detail_confirm">Confirm</string>
+    <string name="detail_cancel">Cancel</string>
+    <string name="detail_section_names">Names and identity</string>
+    <string name="detail_section_product">Product and price</string>
+    <string name="detail_section_class">Classification</string>
+    <string name="detail_section_clinical">Clinical information</string>
+    <string name="detail_section_system">System</string>
+    <string name="detail_aliases">Aliases</string>
+    <string name="detail_alias_add">Add alias</string>
+    <string name="detail_alias_hint">E.g. a common spelling or old name</string>
+    <string name="detail_alias_save">Save</string>
+    <string name="detail_images_note">Product images arrive with Phase 4 (search and images).</string>
+    <string name="detail_reviewed_yes">Reviewed</string>
+    <string name="detail_reviewed_no">Not reviewed</string>
+    <string name="detail_not_found">Drug not found.</string>
+
+    <!-- Editor -->
+    <string name="editor_title_new">Add drug</string>
+    <string name="editor_title_edit">Edit drug</string>
+    <string name="editor_save">Save</string>
+    <string name="editor_saving">Saving…</string>
+    <string name="editor_name_required">Enter at least a trade or scientific name.</string>
+
+    <!-- Trash -->
+    <string name="trash_title">Trash</string>
+    <string name="trash_empty">Trash is empty.</string>
+    <string name="trash_note">Items are deleted forever automatically after 30 days.</string>
+    <string name="trash_restore">Restore</string>
+    <string name="trash_delete">Delete forever</string>
+    <string name="trash_delete_confirm">It will be deleted forever and cannot be restored.</string>
+    <string name="trash_empty_all">Empty trash</string>
+    <string name="trash_empty_confirm">Everything in trash will be deleted forever.</string>
+
+    <!-- Field labels (detail + editor) -->
+    <string name="fld_trade_en">Trade name (English)</string>
+    <string name="fld_trade_ar">Trade name (Arabic)</string>
+    <string name="fld_scientific">Scientific name</string>
+    <string name="fld_actives">Active ingredients</string>
+    <string name="fld_strength">Strength</string>
+    <string name="fld_form">Dosage form</string>
+    <string name="fld_route">Route</string>
+    <string name="fld_manufacturer">Manufacturer</string>
+    <string name="fld_country">Country of origin</string>
+    <string name="fld_agent">Agent</string>
+    <string name="fld_reg_no">Registration No</string>
+    <string name="fld_barcode">Barcode</string>
+    <string name="fld_pack">Pack size</string>
+    <string name="fld_price">Price (YER)</string>
+    <string name="fld_price_date">Price date</string>
+    <string name="fld_dispensing">Dispensing</string>
+    <string name="fld_therapeutic">Therapeutic class</string>
+    <string name="fld_atc">ATC</string>
+    <string name="fld_indications">Indications</string>
+    <string name="fld_dose_adults">Adult dose</string>
+    <string name="fld_dose_children">Child dose</string>
+    <string name="fld_contra">Contraindications</string>
+    <string name="fld_side">Side effects</string>
+    <string name="fld_interactions">Interactions</string>
+    <string name="fld_pregnancy">Pregnancy and lactation</string>
+    <string name="fld_warnings">Warnings</string>
+    <string name="fld_storage">Storage</string>
+    <string name="fld_rxnorm">RxNorm</string>
+    <string name="fld_dailymed">DailyMed</string>
+    <string name="fld_reviewed">Reviewed</string>
+    <string name="fld_source">Source</string>
+
+    <!-- Dosage forms -->
+    <string name="form_tablet">Tablets</string>
+    <string name="form_capsule">Capsules</string>
+    <string name="form_syrup">Syrup</string>
+    <string name="form_suspension">Suspension</string>
+    <string name="form_injection">Injection</string>
+    <string name="form_drops">Drops</string>
+    <string name="form_cream">Cream</string>
+    <string name="form_ointment">Ointment</string>
+    <string name="form_suppository">Suppositories</string>
+    <string name="form_inhaler">Inhaler</string>
+    <string name="form_sachet">Sachets</string>
+    <string name="form_other">Other</string>
+
+    <!-- Dispensing classes -->
+    <string name="disp_rx">Prescription</string>
+    <string name="disp_otc">OTC</string>
+    <string name="disp_controlled">Controlled</string>
+</resources>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Drug list -->
+    <string name="drugs_title">الأدوية</string>
+    <string name="drugs_search_hint">ابحث بالاسم التجاري أو العلمي…</string>
+    <string name="drugs_count">%1$d صنف</string>
+    <string name="drugs_empty">لا توجد أصناف بعد — أضف دواءً أو استورد قائمة.</string>
+    <string name="drugs_search_empty">لا نتائج مطابقة — جرّب تهجئة أخرى.</string>
+    <string name="drugs_load_more">عرض المزيد</string>
+    <string name="drugs_add">إضافة دواء</string>
+    <string name="drugs_import">استيراد</string>
+    <string name="drugs_export">تصدير</string>
+    <string name="drugs_trash">سلة المحذوفات</string>
+    <string name="drugs_back">رجوع</string>
+    <string name="drugs_filters">الفلاتر</string>
+    <string name="drugs_clear_filters">مسح الفلاتر</string>
+    <string name="drugs_all">الكل</string>
+    <string name="drugs_sort">الترتيب</string>
+    <string name="drugs_sort_name">بالاسم</string>
+    <string name="drugs_sort_updated">الأحدث تعديلاً</string>
+    <string name="drugs_sort_created">الأحدث إضافة</string>
+    <string name="drugs_reviewed">تمت مراجعته</string>
+    <string name="drugs_unreviewed">غير مراجع</string>
+    <string name="drugs_incomplete">الناقصة بياناته</string>
+    <string name="drugs_price_yer">%1$s ر.ي</string>
+
+    <!-- Detail -->
+    <string name="detail_title">بطاقة الدواء</string>
+    <string name="detail_edit">تعديل</string>
+    <string name="detail_delete">حذف</string>
+    <string name="detail_delete_confirm">سيُنقل الدواء إلى سلة المحذوفات (تُحفظ 30 يوماً).</string>
+    <string name="detail_confirm">تأكيد</string>
+    <string name="detail_cancel">إلغاء</string>
+    <string name="detail_section_names">الأسماء والتعريف</string>
+    <string name="detail_section_product">المنتج والسعر</string>
+    <string name="detail_section_class">التصنيف</string>
+    <string name="detail_section_clinical">المعلومات السريرية</string>
+    <string name="detail_section_system">النظام</string>
+    <string name="detail_aliases">الأسماء البديلة</string>
+    <string name="detail_alias_add">إضافة اسم بديل</string>
+    <string name="detail_alias_hint">مثال: تهجئة شائعة أو اسم قديم</string>
+    <string name="detail_alias_save">حفظ</string>
+    <string name="detail_images_note">صور المنتج تُضاف مع المرحلة 4 (البحث والصور).</string>
+    <string name="detail_reviewed_yes">تمت المراجعة</string>
+    <string name="detail_reviewed_no">غير مراجع</string>
+    <string name="detail_not_found">الدواء غير موجود.</string>
+
+    <!-- Editor -->
+    <string name="editor_title_new">إضافة دواء</string>
+    <string name="editor_title_edit">تعديل الدواء</string>
+    <string name="editor_save">حفظ</string>
+    <string name="editor_saving">جارٍ الحفظ…</string>
+    <string name="editor_name_required">أدخل اسماً تجارياً أو علمياً على الأقل.</string>
+
+    <!-- Trash -->
+    <string name="trash_title">سلة المحذوفات</string>
+    <string name="trash_empty">السلة فارغة.</string>
+    <string name="trash_note">تُحذف الأصناف نهائياً بعد 30 يوماً تلقائياً.</string>
+    <string name="trash_restore">استعادة</string>
+    <string name="trash_delete">حذف نهائي</string>
+    <string name="trash_delete_confirm">سيُحذف نهائياً ولا يمكن استعادته.</string>
+    <string name="trash_empty_all">إفراغ السلة</string>
+    <string name="trash_empty_confirm">سيُحذف كل ما في السلة نهائياً.</string>
+
+    <!-- Field labels (detail + editor) -->
+    <string name="fld_trade_en">الاسم التجاري (إنجليزي)</string>
+    <string name="fld_trade_ar">الاسم التجاري (عربي)</string>
+    <string name="fld_scientific">الاسم العلمي</string>
+    <string name="fld_actives">المواد الفعالة</string>
+    <string name="fld_strength">التركيز</string>
+    <string name="fld_form">الشكل الصيدلاني</string>
+    <string name="fld_route">طريقة الإعطاء</string>
+    <string name="fld_manufacturer">الشركة المصنعة</string>
+    <string name="fld_country">بلد المنشأ</string>
+    <string name="fld_agent">الوكيل</string>
+    <string name="fld_reg_no">رقم التسجيل</string>
+    <string name="fld_barcode">الباركود</string>
+    <string name="fld_pack">حجم العبوة</string>
+    <string name="fld_price">السعر (ر.ي)</string>
+    <string name="fld_price_date">تاريخ السعر</string>
+    <string name="fld_dispensing">تصنيف الصرف</string>
+    <string name="fld_therapeutic">الفئة العلاجية</string>
+    <string name="fld_atc">ATC</string>
+    <string name="fld_indications">دواعي الاستعمال</string>
+    <string name="fld_dose_adults">جرعة البالغين</string>
+    <string name="fld_dose_children">جرعة الأطفال</string>
+    <string name="fld_contra">موانع الاستعمال</string>
+    <string name="fld_side">الآثار الجانبية</string>
+    <string name="fld_interactions">التداخلات</string>
+    <string name="fld_pregnancy">الحمل والرضاعة</string>
+    <string name="fld_warnings">التحذيرات</string>
+    <string name="fld_storage">التخزين</string>
+    <string name="fld_rxnorm">RxNorm</string>
+    <string name="fld_dailymed">DailyMed</string>
+    <string name="fld_reviewed">تمت المراجعة</string>
+    <string name="fld_source">المصدر</string>
+
+    <!-- Dosage forms -->
+    <string name="form_tablet">أقراص</string>
+    <string name="form_capsule">كبسولات</string>
+    <string name="form_syrup">شراب</string>
+    <string name="form_suspension">مُعلَّق</string>
+    <string name="form_injection">حقن</string>
+    <string name="form_drops">قطرات</string>
+    <string name="form_cream">كريم</string>
+    <string name="form_ointment">مرهم</string>
+    <string name="form_suppository">تحاميل</string>
+    <string name="form_inhaler">بخاخ</string>
+    <string name="form_sachet">أكياس</string>
+    <string name="form_other">أخرى</string>
+
+    <!-- Dispensing classes -->
+    <string name="disp_rx">بوصفة</string>
+    <string name="disp_otc">بدون وصفة</string>
+    <string name="disp_controlled">مراقب</string>
+</resources>

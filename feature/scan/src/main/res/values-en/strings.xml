@@ -48,7 +48,7 @@
     <string name="result_deselect">Clear highlight</string>
     <string name="result_confirm">Confirm review</string>
     <string name="result_confirmed_title">Prescription reviewed</string>
-    <string name="result_confirmed_sub">The record will be saved to prescription history with Phase 3 (database).</string>
+    <string name="result_confirmed_sub">The prescription was saved to history and its medicines matched against the catalog.</string>
     <string name="result_done">Back to home</string>
     <string name="cd_source_image">Original prescription image</string>
 

@@ -48,7 +48,7 @@
     <string name="result_deselect">إلغاء التحديد</string>
     <string name="result_confirm">تأكيد المراجعة</string>
     <string name="result_confirmed_title">تمت مراجعة الوصفة</string>
-    <string name="result_confirmed_sub">سيُحفظ السجل في سجلّ الوصفات مع المرحلة 3 (قاعدة البيانات).</string>
+    <string name="result_confirmed_sub">حُفظت الوصفة في السجل وتمت مطابقة أدويتها مع الدليل.</string>
     <string name="result_done">عودة للرئيسية</string>
     <string name="cd_source_image">صورة الوصفة الأصلية</string>
 

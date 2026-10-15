@@ -12,7 +12,10 @@
     <string name="action_scan_sub">Take a photo of the prescription</string>
     <string name="action_gallery_title">Choose from gallery</string>
     <string name="action_gallery_sub">Pick a saved image</string>
+    <string name="action_catalog_title">Drug catalog</string>
+    <string name="action_catalog_sub">Browse the catalog and import items</string>
     <string name="recent_title">Recent prescriptions</string>
+    <string name="recent_empty">No prescriptions yet — scan your first one.</string>
     <string name="view_all">View all</string>
     <string name="rx1_name">medical_prescription_1.jpg</string>
     <string name="rx1_date">08:24 PM • 06/11/2025</string>

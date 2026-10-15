@@ -12,7 +12,10 @@
     <string name="action_scan_sub">التقط صورة للوصفة</string>
     <string name="action_gallery_title">اختيار من المعرض</string>
     <string name="action_gallery_sub">اختر صورة محفوظة</string>
+    <string name="action_catalog_title">دليل الأدوية</string>
+    <string name="action_catalog_sub">تصفح الدليل واستورد أصنافاً</string>
     <string name="recent_title">الوصفات الأخيرة</string>
+    <string name="recent_empty">لا توجد وصفات بعد — صوّر أول وصفة.</string>
     <string name="view_all">عرض الكل</string>
     <string name="rx1_name">وصفة_طبية_1.jpg</string>
     <string name="rx1_date">08:24 م • 2025/06/11</string>
