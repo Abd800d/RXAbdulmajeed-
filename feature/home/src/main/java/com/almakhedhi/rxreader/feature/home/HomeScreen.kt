@@ -385,7 +385,7 @@ private fun ActionRow(
         ActionCard(
             title = stringResource(R.string.action_gallery_title),
             subtitle = stringResource(R.string.action_gallery_sub),
-            icon = Icons.Filled.Image,
+            icon = Icons.Filled.PhotoLibrary,
             contentDescription = stringResource(R.string.cd_gallery),
             onClick = onGalleryClick,
             modifier = Modifier
