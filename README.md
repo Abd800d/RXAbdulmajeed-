@@ -13,12 +13,28 @@
 
 ## حالة المشروع
 
-🟡 مرحلة التخطيط: الخطة جاهزة، وننتظر اعتمادها لبدء المرحلة 0 (التأسيس).
+- ✅ **المرحلة 0 (التأسيس) مكتملة:** هيكل Android متعدد الوحدات، ونظام التصميم بألوان التصميم المرجعي وخط Cairo، والشاشة الرئيسية بالعربية والإنجليزية، وبناء آلي يُنتج ملف APK.
+- ⏳ **القادم — المرحلة 1:** تسجيل الدخول (البريد الإلكتروني + Google) وربط Firebase.
 
-## التقنيات باختصار
+## البناء والتشغيل
 
-Kotlin · Jetpack Compose · Material 3 · Room (FTS) · Hilt · WorkManager · ML Kit (Document Scanner) ·
-Firebase (Auth · Firestore · Storage · AI Logic / Gemini · Cloud Functions · App Check · Crashlytics · Remote Config)
+المتطلبات: أحدث إصدار من Android Studio مع JDK 21.
+
+```bash
+./gradlew assembleDebug
+```
+
+ملف التثبيت: `app/build/outputs/apk/debug/app-debug.apk`.
+تُبنى نسخة تلقائياً مع كل دفع على الفرع، وتجدها في صفحة **Actions** ثم **rxreader-debug-apk**.
+
+## هيكل المشروع
+
+```text
+app/                   # نقطة الدخول (MainActivity) والشاشة الرئيسية
+core/designsystem/     # نظام التصميم: الألوان، خط Cairo، الثيم
+feature/home/          # الشاشة الرئيسية مطابقة للتصميم المرجعي
+docs/                  # الخطة والتصاميم
+```
 
 ## الدعم والتواصل
 
@@ -31,4 +47,6 @@ Firebase (Auth · Firestore · Storage · AI Logic / Gemini · Cloud Functions �
 
 **Rx Reader** is a native Android app that reads handwritten prescriptions using AI (Google Gemini). It extracts trade and scientific drug names with dosage and matches them against a persistent local drug database that supports CSV, Excel and JSON import and export. It also searches trusted medical sources and Google, and includes an AI drug assistant that cites its sources. The app is Arabic-first (RTL) with English support.
 
-The full build plan (in Arabic) is in [docs/PLAN.md](docs/PLAN.md).
+- Full build plan (in Arabic): [docs/PLAN.md](docs/PLAN.md).
+- Phase 0 is done: multi-module setup, design system (Cairo font, mockup colors), home screen in Arabic and English, and CI that builds a debug APK.
+- Build: `./gradlew assembleDebug` (Android Studio + JDK 21).

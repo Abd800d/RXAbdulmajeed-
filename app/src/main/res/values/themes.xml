@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.RxReader" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <!-- Legacy splash (API 26-30): shown until MainActivity calls setTheme(). -->
+    <style name="Theme.RxReader.Splash" parent="Theme.RxReader">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
+</resources>

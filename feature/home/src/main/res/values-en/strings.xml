@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_title">Rx Reader</string>
+    <string name="history">History</string>
+    <string name="settings">Settings</string>
+    <string name="hero_subtitle">Read your prescription with ease and intelligence</string>
+    <string name="doctor_name">Dr. Abdulmajeed Almakhedhi</string>
+    <string name="hero_tagline">YOUR HEALTH • OUR PRIORITY</string>
+    <string name="search_hint">Search by trade or scientific drug name</string>
+    <string name="search_action">Search for a drug</string>
+    <string name="action_scan_title">Scan prescription</string>
+    <string name="action_scan_sub">Take a photo of the prescription</string>
+    <string name="action_gallery_title">Choose from gallery</string>
+    <string name="action_gallery_sub">Pick a saved image</string>
+    <string name="recent_title">Recent prescriptions</string>
+    <string name="view_all">View all</string>
+    <string name="rx1_name">medical_prescription_1.jpg</string>
+    <string name="rx1_date">08:24 PM • 06/11/2025</string>
+    <string name="rx2_name">drugs_prescription_.png</string>
+    <string name="rx2_date">04:17 PM • 06/10/2025</string>
+    <string name="rx3_name">medical_prescription_2.jpg</string>
+    <string name="rx3_date">10:32 AM • 06/09/2025</string>
+    <string name="prepared_by">Prepared by</string>
+    <string name="footer_tagline">MEDICINE • KNOWLEDGE • SAFETY</string>
+    <string name="msg_coming_soon">This feature is coming in the next phase</string>
+    <string name="cd_hero">Illustrative medical image</string>
+    <string name="cd_scan">Camera icon</string>
+    <string name="cd_gallery">Gallery icon</string>
+    <string name="cd_doc">Document icon</string>
+    <string name="cd_open">Open</string>
+</resources>

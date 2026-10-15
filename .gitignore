@@ -1,0 +1,19 @@
+# Gradle
+.gradle/
+**/build/
+
+# Android Studio
+*.iml
+.idea/
+local.properties
+
+# Signing & secrets — never commit these
+*.jks
+*.keystore
+keystore.properties
+google-services.json
+GoogleService-Info.plist
+
+# OS
+.DS_Store
+Thumbs.db

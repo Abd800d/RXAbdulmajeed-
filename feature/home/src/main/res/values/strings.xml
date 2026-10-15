@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_title">قارئ الوصفات الطبية</string>
+    <string name="history">السجل</string>
+    <string name="settings">الإعدادات</string>
+    <string name="hero_subtitle">اقرأ وصفتك الطبية بسهولة وذكاء</string>
+    <string name="doctor_name">Dr. Abdulmajeed Almakhedhi</string>
+    <string name="hero_tagline">YOUR HEALTH • OUR PRIORITY</string>
+    <string name="search_hint">ابحث عن اسم الدواء التجاري أو العلمي</string>
+    <string name="search_action">البحث عن دواء</string>
+    <string name="action_scan_title">تصوير وصفة طبية</string>
+    <string name="action_scan_sub">التقط صورة للوصفة</string>
+    <string name="action_gallery_title">اختيار من المعرض</string>
+    <string name="action_gallery_sub">اختر صورة محفوظة</string>
+    <string name="recent_title">الوصفات الأخيرة</string>
+    <string name="view_all">عرض الكل</string>
+    <string name="rx1_name">وصفة_طبية_1.jpg</string>
+    <string name="rx1_date">08:24 م • 2025/06/11</string>
+    <string name="rx2_name">وصفة_أدوية_.png</string>
+    <string name="rx2_date">04:17 م • 2025/06/10</string>
+    <string name="rx3_name">وصفة_طبية_2.jpg</string>
+    <string name="rx3_date">10:32 ص • 2025/06/09</string>
+    <string name="prepared_by">Prepared by</string>
+    <string name="footer_tagline">MEDICINE • KNOWLEDGE • SAFETY</string>
+    <string name="msg_coming_soon">ستتوفر هذه الميزة في المرحلة القادمة</string>
+    <string name="cd_hero">صورة تعبيرية طبية</string>
+    <string name="cd_scan">أيقونة الكاميرا</string>
+    <string name="cd_gallery">أيقونة المعرض</string>
+    <string name="cd_doc">أيقونة مستند</string>
+    <string name="cd_open">فتح</string>
+</resources>
