@@ -39,13 +39,13 @@ class FirebaseAiReader @Inject constructor(
                 generationConfig = GenerationConfig.builder()
                     .setResponseMimeType("application/json")
                     .build(),
-                systemInstruction = Content.Builder()
-                    .addText(RX_SYSTEM_PROMPT)
-                    .build(),
+                systemInstruction = Content.Builder().apply {
+                    text(RX_SYSTEM_PROMPT)
+                }.build(),
             )
             val prompt = Content.Builder().apply {
-                images.forEach { addImage(it) }
-                addText(RX_USER_PROMPT)
+                images.forEach { image(it) }
+                text(RX_USER_PROMPT)
             }.build()
             val response = model.generateContent(prompt)
             val raw = response.text ?: throw IllegalStateException("Empty AI response")
