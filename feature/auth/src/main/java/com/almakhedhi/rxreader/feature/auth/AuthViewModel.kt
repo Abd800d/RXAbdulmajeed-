@@ -53,7 +53,9 @@ class AuthViewModel @Inject constructor(
             _uiState.update { it.copy(loading = true, error = null) }
             repository.signIn(email, password).fold(
                 onSuccess = { _uiState.update { it.copy(loading = false) } },
-                onFailure = { _uiState.update { it.copy(loading = false, error = it.userMessage()) } },
+                onFailure = { error ->
+                    _uiState.update { it.copy(loading = false, error = error.userMessage()) }
+                },
             )
         }
     }
@@ -66,7 +68,9 @@ class AuthViewModel @Inject constructor(
             _uiState.update { it.copy(loading = true, error = null) }
             repository.signUp(name, email, password).fold(
                 onSuccess = { _uiState.update { it.copy(loading = false) } },
-                onFailure = { _uiState.update { it.copy(loading = false, error = it.userMessage()) } },
+                onFailure = { error ->
+                    _uiState.update { it.copy(loading = false, error = error.userMessage()) }
+                },
             )
         }
     }
@@ -77,7 +81,9 @@ class AuthViewModel @Inject constructor(
             _uiState.update { it.copy(loading = true, error = null, resetSent = false) }
             repository.sendPasswordReset(email).fold(
                 onSuccess = { _uiState.update { it.copy(loading = false, resetSent = true) } },
-                onFailure = { _uiState.update { it.copy(loading = false, error = it.userMessage()) } },
+                onFailure = { error ->
+                    _uiState.update { it.copy(loading = false, error = error.userMessage()) }
+                },
             )
         }
     }
@@ -96,8 +102,10 @@ class AuthViewModel @Inject constructor(
                 }
                 repository.signInWithGoogle(idToken).fold(
                     onSuccess = { _uiState.update { it.copy(googleLoading = false) } },
-                    onFailure = {
-                        _uiState.update { it.copy(googleLoading = false, error = it.userMessage()) }
+                    onFailure = { error ->
+                        _uiState.update {
+                            it.copy(googleLoading = false, error = error.userMessage())
+                        }
                     },
                 )
             } catch (_: GetCredentialCancellationException) {
