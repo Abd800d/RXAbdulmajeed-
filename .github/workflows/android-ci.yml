@@ -6,6 +6,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   build:
     name: Build, test and lint
@@ -24,13 +28,13 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build debug APK
-        run: ./gradlew assembleDebug --stacktrace
+        run: ./gradlew assembleDebug --stacktrace 2>&1 | tee build.log; exit "${PIPESTATUS[0]}"
 
       - name: Run unit tests
-        run: ./gradlew testDebugUnitTest --stacktrace
+        run: ./gradlew testDebugUnitTest --stacktrace 2>&1 | tee test.log; exit "${PIPESTATUS[0]}"
 
       - name: Run lint
-        run: ./gradlew lintDebug --stacktrace
+        run: ./gradlew lintDebug --stacktrace 2>&1 | tee lint.log; exit "${PIPESTATUS[0]}"
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
@@ -38,3 +42,21 @@ jobs:
           name: rxreader-debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
+
+      - name: Upload Gradle logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-logs
+          path: "*.log"
+          retention-days: 7
+
+      # Temporary diagnostic: CI log downloads are unreachable from the dev
+      # sandbox, so on failure the tail of the logs is posted to an issue.
+      - name: Report failure log
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          { echo '```'; tail -c 55000 build.log test.log lint.log 2>/dev/null; echo '```'; } > report.md
+          gh issue create --title "CI failure (run ${{ github.run_id }})" --body-file report.md
