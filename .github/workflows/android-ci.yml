@@ -51,6 +51,12 @@ jobs:
           path: "*.log"
           retention-days: 7
 
+      - name: Close stale diagnostic issues
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh issue list --search "CI failure (run" --state open --json number --jq '.[].number' | xargs -r -n1 gh issue close || true
+
       # Temporary diagnostic: CI log downloads are unreachable from the dev
       # sandbox, so on failure the tail of the logs is posted to an issue.
       - name: Report failure log
