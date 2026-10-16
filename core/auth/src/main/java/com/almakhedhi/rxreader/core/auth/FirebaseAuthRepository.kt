@@ -40,7 +40,9 @@ class FirebaseAuthRepository @Inject constructor(
     override val currentUser: Flow<RxUser?> = callbackFlow {
         val auth = authOrNull()
         if (auth == null) {
+            // No Firebase on this install: emit signed-out and stay open.
             trySend(null)
+            awaitClose { }
         } else {
             trySend(auth.currentUser?.toRxUser())
             val listener = FirebaseAuth.AuthStateListener {
