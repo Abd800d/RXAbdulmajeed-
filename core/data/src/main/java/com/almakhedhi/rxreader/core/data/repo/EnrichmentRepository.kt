@@ -1,5 +1,6 @@
 package com.almakhedhi.rxreader.core.data.repo
 
+import android.content.Context
 import com.almakhedhi.rxreader.core.database.dao.EnrichCacheDao
 import com.almakhedhi.rxreader.core.database.entity.EnrichCacheEntity
 import com.almakhedhi.rxreader.core.database.entity.ImageKind
@@ -8,12 +9,16 @@ import com.almakhedhi.rxreader.core.network.dailymed.DailyMedApi
 import com.almakhedhi.rxreader.core.network.di.NetworkModule
 import com.almakhedhi.rxreader.core.network.openfda.OpenFdaApi
 import com.almakhedhi.rxreader.core.network.rxnorm.RxNormApi
+import com.google.firebase.FirebaseApp
+import com.google.firebase.functions.FirebaseFunctions
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
@@ -61,6 +66,9 @@ data class EnrichImage(
  * label sections, DailyMed for the official label + pack images, and
  * Wikimedia Commons as the keyless image fallback. Payloads are cached in
  * [EnrichCacheEntity] for [CACHE_TTL_MS].
+ *
+ * Image search tries the keyed Cloud Function first (best quality, key in
+ * Secret Manager — never in the app), then falls back to the open sources.
  */
 @Singleton
 class EnrichmentRepository @Inject constructor(
@@ -72,6 +80,7 @@ class EnrichmentRepository @Inject constructor(
     private val cache: EnrichCacheDao,
     private val json: Json,
     private val images: ImageRepository,
+    @ApplicationContext private val context: Context,
 ) {
     suspend fun searchOfficial(query: String): List<OfficialMatch> {
         val q = query.trim()
@@ -174,8 +183,51 @@ class EnrichmentRepository @Inject constructor(
             )
         }
 
+    /**
+     * Keyed Cloud Function first (best quality), then DailyMed pack images
+     * (official), then Commons. Any stage may fail open into the next.
+     */
+    suspend fun searchImages(query: String, setId: String? = null): List<EnrichImage> {
+        val keyed = runCatching { searchKeyed(query) }.getOrDefault(emptyList())
+        val open = searchOpenImages(query, setId)
+        return (keyed + open).distinctBy { it.url }.take(MAX_IMAGES)
+    }
+
+    /**
+     * Callable [FUNCTION_SEARCH_IMAGES] (see /functions). Returns empty when
+     * Firebase is not configured yet — the open sources still work.
+     */
+    private suspend fun searchKeyed(query: String): List<EnrichImage> {
+        val q = query.trim()
+        if (q.length < 2 || FirebaseApp.getApps(context).isEmpty()) return emptyList()
+        val payload = hashMapOf<String, Any>("query" to q, "limit" to MAX_CANDIDATES)
+        val result = FirebaseFunctions.getInstance()
+            .getHttpsCallable(FUNCTION_SEARCH_IMAGES)
+            .call(payload)
+            .await()
+        val root = result.data as? Map<*, *> ?: return emptyList()
+        val items = root["images"] as? List<*> ?: return emptyList()
+        return items.mapNotNull { item ->
+            val o = item as? Map<*, *> ?: return@mapNotNull null
+            val url = o["url"] as? String ?: return@mapNotNull null
+            EnrichImage(
+                url = url,
+                thumbUrl = o["thumb"] as? String,
+                width = (o["width"] as? Number)?.toInt() ?: 0,
+                height = (o["height"] as? Number)?.toInt() ?: 0,
+                license = o["license"] as? String,
+                credit = o["credit"] as? String,
+                kind = ImageKind.WEB,
+                label = o["source"] as? String,
+            )
+        }
+    }
+
     /** DailyMed pack images first (official), then Commons results. */
-    suspend fun searchImages(query: String, setId: String? = null): List<EnrichImage> =
+    private suspend fun searchOpenImages(
+        query: String,
+        setId: String?,
+    ): List<EnrichImage> =
         coroutineScope {
             val q = query.trim()
             val dmDeferred = async {
@@ -290,7 +342,9 @@ class EnrichmentRepository @Inject constructor(
 
     companion object {
         const val MAX_CANDIDATES = 8
+        const val MAX_IMAGES = 12
         const val MAX_DOWNLOAD_BYTES = 8 * 1024 * 1024
         const val CACHE_TTL_MS = 30L * 24 * 60 * 60 * 1000
+        const val FUNCTION_SEARCH_IMAGES = "searchImages"
     }
 }
