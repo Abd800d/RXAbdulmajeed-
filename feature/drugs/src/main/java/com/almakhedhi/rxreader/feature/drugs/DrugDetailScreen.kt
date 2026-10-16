@@ -93,7 +93,9 @@ fun DrugDetailScreen(
     var showEnrichConfirm by remember { mutableStateOf(false) }
     var showAiConfirm by remember { mutableStateOf(false) }
     var showWeb by remember { mutableStateOf(false) }
-    val pickLauncher = rememberLauncherForActivityResult(PickMultipleVisualMedia()) { uris ->
+    val pickLauncher = rememberLauncherForActivityResult(
+        PickMultipleVisualMedia(DrugDetailViewModel.MAX_ATTACH),
+    ) { uris ->
         if (uris.isNotEmpty()) viewModel.attachUris(uris)
     }
     val cameraLauncher = rememberLauncherForActivityResult(TakePicturePreview()) { bitmap ->
@@ -269,7 +271,6 @@ fun DrugDetailScreen(
                             pickLauncher.launch(
                                 PickVisualMediaRequest.Builder()
                                     .setMediaType(PickVisualMedia.ImageOnly)
-                                    .setMaxItems(DrugDetailViewModel.MAX_ATTACH)
                                     .build(),
                             )
                         },
