@@ -17,6 +17,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -126,36 +127,40 @@ class BulkViewModel @Inject constructor(
                 withAi = current.withAi,
                 wifiOnly = current.prefs.wifiOnly,
             )
-            WorkManager.getInstance(appContext)
+            val flow = WorkManager.getInstance(appContext)
                 .getWorkInfosForUniqueWorkFlow(EnrichWork.BULK_NAME)
-                .collect { infos ->
-                    val info = infos.firstOrNull() ?: return@collect
-                    if (info.state.isFinished) {
-                        if (info.state == WorkInfo.State.SUCCEEDED) {
-                            val out = info.outputData
-                            _state.update {
-                                it.copy(
-                                    running = false,
-                                    report = BulkReport(
-                                        done = out.getInt(EnrichWork.OUT_DONE, 0),
-                                        enriched = out.getInt(EnrichWork.OUT_ENRICHED, 0),
-                                        images = out.getInt(EnrichWork.OUT_IMAGES, 0),
-                                        aiDone = out.getInt(EnrichWork.OUT_AI, 0),
-                                        aiSkipped = out.getBoolean(EnrichWork.OUT_AI_SKIPPED, false),
-                                    ),
-                                )
-                            }
-                        } else {
-                            _state.update { it.copy(running = false, failed = true) }
-                        }
-                        refresh()
-                        return@launch
-                    } else {
-                        _state.update {
-                            it.copy(progress = info.progress.getFloat(EnrichWork.PROGRESS, 0f))
-                        }
+            val progressJob = launch {
+                flow.collect { infos ->
+                    _state.update {
+                        it.copy(
+                            progress = infos.firstOrNull()?.progress
+                                ?.getFloat(EnrichWork.PROGRESS, 0f) ?: 0f,
+                        )
                     }
                 }
+            }
+            val finished =
+                flow.first { infos -> infos.firstOrNull()?.state?.isFinished == true }
+            progressJob.cancel()
+            val info = finished.firstOrNull()
+            if (info?.state == WorkInfo.State.SUCCEEDED) {
+                val out = info.outputData
+                _state.update {
+                    it.copy(
+                        running = false,
+                        report = BulkReport(
+                            done = out.getInt(EnrichWork.OUT_DONE, 0),
+                            enriched = out.getInt(EnrichWork.OUT_ENRICHED, 0),
+                            images = out.getInt(EnrichWork.OUT_IMAGES, 0),
+                            aiDone = out.getInt(EnrichWork.OUT_AI, 0),
+                            aiSkipped = out.getBoolean(EnrichWork.OUT_AI_SKIPPED, false),
+                        ),
+                    )
+                }
+            } else {
+                _state.update { it.copy(running = false, failed = true) }
+            }
+            refresh()
         }
     }
 

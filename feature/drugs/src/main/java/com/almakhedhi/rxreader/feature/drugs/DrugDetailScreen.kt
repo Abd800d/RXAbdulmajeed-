@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts.PickMultipleVisualMedia
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.activity.result.contract.ActivityResultContracts.TakePicturePreview
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyRow
@@ -98,7 +99,6 @@ fun DrugDetailScreen(
     val cameraLauncher = rememberLauncherForActivityResult(TakePicturePreview()) { bitmap ->
         if (bitmap != null) viewModel.attachBitmap(bitmap)
     }
-    val launchCamera: () -> Unit = { cameraLauncher.launch(null) }
     LaunchedEffect(drugId) { viewModel.load(drugId) }
     LaunchedEffect(state.deleted) { if (state.deleted) onBack() }
     Scaffold(
@@ -267,10 +267,13 @@ fun DrugDetailScreen(
                         fileFor = viewModel::imageFile,
                         onPick = {
                             pickLauncher.launch(
-                                PickVisualMediaRequest(PickMultipleVisualMedia(DrugDetailViewModel.MAX_ATTACH)),
+                                PickVisualMediaRequest.Builder()
+                                    .setMediaType(PickVisualMedia.ImageOnly)
+                                    .setMaxItems(DrugDetailViewModel.MAX_ATTACH)
+                                    .build(),
                             )
                         },
-                        onCamera = ::launchCamera,
+                        onCamera = { cameraLauncher.launch(null) },
                         onWeb = {
                             showWeb = true
                             viewModel.loadWebImages()

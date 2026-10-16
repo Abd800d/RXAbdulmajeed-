@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -169,31 +170,34 @@ class DrugDetailViewModel @Inject constructor(
                 withAi = false,
                 wifiOnly = _state.value.prefs.wifiOnly,
             )
-            WorkManager.getInstance(appContext).getWorkInfoByIdFlow(uuid).collect { info ->
-                if (info == null) return@collect
-                if (info.state.isFinished) {
-                    if (info.state == WorkInfo.State.SUCCEEDED) {
-                        val out = info.outputData
-                        _state.update {
-                            it.copy(
-                                enriching = false,
-                                enrichReport = EnrichReport(
-                                    enriched = out.getInt(EnrichWork.OUT_ENRICHED, 0) > 0,
-                                    images = out.getInt(EnrichWork.OUT_IMAGES, 0),
-                                    aiDone = 0,
-                                    aiSkipped = false,
-                                ),
-                            )
-                        }
-                    } else {
-                        _state.update { it.copy(enriching = false, enrichFailed = true) }
-                    }
-                    return@launch
-                } else {
+            val flow = WorkManager.getInstance(appContext).getWorkInfoByIdFlow(uuid)
+            val progressJob = launch {
+                flow.collect { info ->
                     _state.update {
-                        it.copy(enrichProgress = info.progress.getFloat(EnrichWork.PROGRESS, 0f))
+                        it.copy(
+                            enrichProgress = info?.progress?.getFloat(EnrichWork.PROGRESS, 0f)
+                                ?: 0f,
+                        )
                     }
                 }
+            }
+            val finished = flow.first { it?.state?.isFinished == true }
+            progressJob.cancel()
+            if (finished?.state == WorkInfo.State.SUCCEEDED) {
+                val out = finished.outputData
+                _state.update {
+                    it.copy(
+                        enriching = false,
+                        enrichReport = EnrichReport(
+                            enriched = out.getInt(EnrichWork.OUT_ENRICHED, 0) > 0,
+                            images = out.getInt(EnrichWork.OUT_IMAGES, 0),
+                            aiDone = 0,
+                            aiSkipped = false,
+                        ),
+                    )
+                }
+            } else {
+                _state.update { it.copy(enriching = false, enrichFailed = true) }
             }
         }
     }
