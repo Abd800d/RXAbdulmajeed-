@@ -23,6 +23,19 @@ if (googleServicesJson.exists()) {
         ?.get("client_id") as? String ?: ""
 }
 
+// Direct Gemini API key (owner machine only): local.properties
+// `gemini.api.key`, or the GEMINI_API_KEY env var. Empty means the direct
+// path is disabled; Firebase AI Logic is still tried first.
+val geminiLocalProps = java.util.Properties()
+val geminiLocalFile = rootProject.file("local.properties")
+if (geminiLocalFile.exists()) {
+    geminiLocalFile.inputStream().use(geminiLocalProps::load)
+}
+val geminiApiKey = (
+    System.getenv("GEMINI_API_KEY")
+        ?: geminiLocalProps.getProperty("gemini.api.key", "")
+    ).trim()
+
 android {
     namespace = "com.almakhedhi.rxreader"
     compileSdk = 36
@@ -34,6 +47,7 @@ android {
         versionCode = 1
         versionName = "0.1.0"
         buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"$googleWebClientId\"")
+        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
     }
 
     // Shared debug key (committed on purpose): a stable signature on every

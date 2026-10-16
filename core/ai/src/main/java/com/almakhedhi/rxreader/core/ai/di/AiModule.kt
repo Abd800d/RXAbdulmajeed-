@@ -1,7 +1,7 @@
 package com.almakhedhi.rxreader.core.ai.di
 
 import com.almakhedhi.rxreader.core.ai.AiReader
-import com.almakhedhi.rxreader.core.ai.FirebaseAiReader
+import com.almakhedhi.rxreader.core.ai.DefaultAiReader
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,5 +14,5 @@ abstract class AiModule {
 
     @Binds
     @Singleton
-    abstract fun bindAiReader(impl: FirebaseAiReader): AiReader
+    abstract fun bindAiReader(impl: DefaultAiReader): AiReader
 }

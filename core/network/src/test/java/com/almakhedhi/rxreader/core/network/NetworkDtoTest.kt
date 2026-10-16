@@ -3,6 +3,11 @@ package com.almakhedhi.rxreader.core.network
 import com.almakhedhi.rxreader.core.network.commons.CommonsResponse
 import com.almakhedhi.rxreader.core.network.dailymed.DmMediaResponse
 import com.almakhedhi.rxreader.core.network.dailymed.DmSplListResponse
+import com.almakhedhi.rxreader.core.network.gemini.GContent
+import com.almakhedhi.rxreader.core.network.gemini.GGenConfig
+import com.almakhedhi.rxreader.core.network.gemini.GGenerateRequest
+import com.almakhedhi.rxreader.core.network.gemini.GGenerateResponse
+import com.almakhedhi.rxreader.core.network.gemini.GPart
 import com.almakhedhi.rxreader.core.network.openfda.FdaLabelResponse
 import com.almakhedhi.rxreader.core.network.rxnorm.RxApproxResponse
 import com.almakhedhi.rxreader.core.network.rxnorm.RxPropertiesResponse
@@ -99,5 +104,21 @@ class NetworkDtoTest {
         assertEquals(800, image?.width)
         assertEquals("CC BY-SA 4.0", image?.license())
         assertEquals("Some One", image?.artist())
+    }
+
+    @Test
+    fun `gemini generateContent response parses first text`() {
+        val raw = """{"candidates":[{"content":{"role":"model","parts":[""" +
+            """{"text":"  {\"a\":1}  "}]}}],"usageMetadata":{"a":1}}"""
+        val parsed = json.decodeFromString<GGenerateResponse>(raw)
+        assertEquals("{\"a\":1}", parsed.firstText())
+        val request = GGenerateRequest(
+            system_instruction = GContent(parts = listOf(GPart(text = "sys"))),
+            contents = listOf(GContent(role = "user", parts = listOf(GPart(text = "hi")))),
+            generationConfig = GGenConfig(response_mime_type = "application/json"),
+        )
+        val encoded = json.encodeToString(request)
+        assertTrue(encoded.contains("system_instruction"))
+        assertTrue(encoded.contains("response_mime_type"))
     }
 }

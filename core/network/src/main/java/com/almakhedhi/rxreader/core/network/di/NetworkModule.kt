@@ -3,6 +3,7 @@ package com.almakhedhi.rxreader.core.network.di
 import com.almakhedhi.rxreader.core.network.NetworkJson
 import com.almakhedhi.rxreader.core.network.commons.CommonsApi
 import com.almakhedhi.rxreader.core.network.dailymed.DailyMedApi
+import com.almakhedhi.rxreader.core.network.gemini.GeminiApi
 import com.almakhedhi.rxreader.core.network.openfda.OpenFdaApi
 import com.almakhedhi.rxreader.core.network.rxnorm.RxNormApi
 import dagger.Module
@@ -74,4 +75,10 @@ object NetworkModule {
     fun provideCommons(client: OkHttpClient, json: Json): CommonsApi =
         retrofit(client, json, "https://commons.wikimedia.org/")
             .create(CommonsApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideGemini(client: OkHttpClient, json: Json): GeminiApi =
+        retrofit(client, json, "https://generativelanguage.googleapis.com/")
+            .create(GeminiApi::class.java)
 }

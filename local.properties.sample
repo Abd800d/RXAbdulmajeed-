@@ -1,0 +1,6 @@
+# Copy to local.properties (gitignored, never committed) and paste your
+# free Google AI Studio key (https://aistudio.google.com/apikey).
+# Current keys start with "AQ." — that is the valid new format.
+# Recommended: restrict the key in Google Cloud console to this Android app
+# (package com.almakhedhi.rxreader + your SHA-1).
+gemini.api.key=
