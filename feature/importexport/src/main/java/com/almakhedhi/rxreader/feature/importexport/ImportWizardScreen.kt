@@ -413,11 +413,11 @@ private fun FormatStep(
                     },
                 )
             }
-            if (state.format == ImportExportRepository.Format.XLSX && parsed.sheets.size > 1) {
+            if (state.format == ImportExportRepository.Format.XLSX && parsed.sheetNames.size > 1) {
                 MappingDropdown(
                     label = stringResource(R.string.fmt_sheet),
-                    options = parsed.sheets,
-                    selected = parsed.sheet,
+                    options = parsed.sheetNames,
+                    selected = parsed.sheetName,
                     onSelect = { it?.let(onSheet) },
                 )
             }
@@ -537,7 +537,7 @@ private fun PreviewTable(
                     Row {
                         row.cells.forEach { cell ->
                             Text(
-                                text = cell.ifBlank { "—" },
+                                text = (cell ?: "").ifBlank { "—" },
                                 style = MaterialTheme.typography.bodySmall,
                                 color = InkMuted,
                                 maxLines = 1,
@@ -580,11 +580,11 @@ private fun ValidationStep(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        ValidationCount(stringResource(R.string.val_total, validation.total))
-        ValidationCount(stringResource(R.string.val_new, validation.fresh))
-        ValidationCount(stringResource(R.string.val_duplicates, validation.duplicates))
+        ValidationCount(stringResource(R.string.val_total, validation.totalRows))
+        ValidationCount(stringResource(R.string.val_new, validation.newCount))
+        ValidationCount(stringResource(R.string.val_duplicates, validation.duplicateCount))
         ValidationCount(stringResource(R.string.val_invalid, validation.invalidCount))
-        ValidationCount(stringResource(R.string.val_empty, validation.empty))
+        ValidationCount(stringResource(R.string.val_empty, validation.emptyRows))
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = stringResource(R.string.val_policy),
@@ -618,7 +618,7 @@ private fun ValidationStep(
                 Text(
                     text = stringResource(
                         R.string.val_problem_row,
-                        problem.number,
+                        problem.rowNumber,
                         problem.reason,
                     ),
                     style = MaterialTheme.typography.bodySmall,
@@ -697,14 +697,14 @@ private fun ProgressStep(
             }
             if (progress != null) {
                 LinearProgressIndicator(
-                    progress = { progress.done.toFloat() / progress.total.coerceAtLeast(1) },
+                    progress = { progress.processed.toFloat() / progress.total.coerceAtLeast(1) },
                     modifier = Modifier.fillMaxWidth(),
                     color = TealPrimary,
                 )
                 Text(
                     text = stringResource(
                         R.string.prog_running,
-                        progress.done,
+                        progress.processed,
                         progress.total,
                     ),
                     style = MaterialTheme.typography.bodyMedium,
@@ -717,7 +717,7 @@ private fun ProgressStep(
             Text(
                 text = stringResource(
                     R.string.rep_done,
-                    report.seconds.coerceAtLeast(1),
+                    (report.durationMs / 1000).coerceAtLeast(1),
                 ),
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
@@ -727,7 +727,7 @@ private fun ProgressStep(
             ValidationCount(stringResource(R.string.rep_updated, report.updated))
             ValidationCount(stringResource(R.string.rep_skipped, report.skipped))
             ValidationCount(stringResource(R.string.rep_errors, report.errors))
-            if (report.errors > 0 && report.errorCsv != null) {
+            if (report.errors > 0 && report.errorCsv.isNotEmpty()) {
                 OutlinedButton(
                     onClick = { errorFileLauncher.launch("rxreader-errors.csv") },
                     modifier = Modifier.fillMaxWidth(),
