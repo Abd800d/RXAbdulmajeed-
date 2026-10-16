@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Comprehensive search -->
+    <string name="search_title">البحث الشامل</string>
+    <string name="search_hint">ابحث عن دواء بالعربية أو الإنجليزية…</string>
+    <string name="layer_local">على جهازك</string>
+    <string name="layer_official">المصادر الرسمية</string>
+    <string name="layer_ai">اقتراحات الذكاء الاصطناعي</string>
+    <string name="local_empty">لا نتائج محلية — جرّب المصادر الرسمية بالأسفل.</string>
+    <string name="official_load">بحث في المصادر الرسمية</string>
+    <string name="official_empty">لا نتائج في المصادر الرسمية.</string>
+    <string name="official_hint">RxNorm وFDA وDailyMed — مجاني وبدون مفتاح.</string>
+    <string name="google_search">بحث في جوجل</string>
+    <string name="save_to_catalog">حفظ في الكتالوج</string>
+    <string name="saving">جارٍ الحفظ…</string>
+    <string name="ai_ask">اسأل الذكاء الاصطناعي</string>
+    <string name="ai_remaining">المتبقي اليوم: %1$d</string>
+    <string name="ai_empty">لا اقتراحات — تحقق من الاتصال أو الرصيد اليومي.</string>
+    <string name="match_exact">مطابق</string>
+    <string name="match_alias">اسم بديل</string>
+    <string name="match_fts">بحث</string>
+    <string name="match_fuzzy">تقريبي</string>
+    <string name="images_title">صور من الويب</string>
+    <string name="license_label">الترخيص: %1$s</string>
+    <string name="f_generic">الاسم العلمي</string>
+    <string name="f_brands">الأسماء التجارية</string>
+    <string name="f_substance">المادة الفعالة</string>
+    <string name="f_manufacturer">الشركة المصنعة</string>
+    <string name="f_route">طريقة الإعطاء</string>
+    <string name="f_form">الشكل الدوائي</string>
+    <string name="f_indications">دواعي الاستعمال</string>
+    <string name="f_dosage">الجرعة</string>
+    <string name="f_warnings">تحذيرات</string>
+    <string name="f_packaging">العبوة</string>
+    <string name="label_open">فتح النشرة الرسمية</string>
+    <string name="error_network">تعذّر الاتصال — تحقق من الإنترنت وحاول مجددًا.</string>
+    <!-- Bulk enrichment -->
+    <string name="bulk_title">تحسين جماعي</string>
+    <string name="bulk_desc">اختر الأصناف الناقصة لإكمالها من المصادر الرسمية. الطلبات الرسمية مجانية؛ استدعاءات الذكاء الاصطناعي تُخصم من رصيدك اليومي.</string>
+    <string name="bulk_none">لا أصناف ناقصة — الكتالوج مكتمل.</string>
+    <string name="bulk_selected">المحدد: %1$d من %2$d</string>
+    <string name="bulk_all">الكل</string>
+    <string name="bulk_none_btn">لا شيء</string>
+    <string name="bulk_ai">إكمال بالذكاء الاصطناعي أيضًا</string>
+    <string name="bulk_ai_estimate">استدعاءات الذكاء: %1$d (المتبقي اليوم %2$d)</string>
+    <string name="bulk_estimate">الأصناف المحددة: %1$d • رصيد الذكاء المتبقي: %2$d</string>
+    <string name="bulk_running">جارٍ التحسين… %1$d%%</string>
+    <string name="bulk_done">اكتمل: %1$d صنف • بيانات رسمية %2$d • صور %3$d • ذكاء %4$d</string>
+    <string name="bulk_ai_skipped">نفد رصيد الذكاء أثناء التشغيل — أكمل الباقي غدًا.</string>
+    <string name="bulk_start">بدء التحسين</string>
+    <string name="bulk_cancel">إلغاء</string>
+    <string name="bulk_confirm">تحسين %1$d صنفًا من المصادر الرسمية؟</string>
+    <string name="bulk_off_hint">الإثراء متوقف — فعّله من الإعدادات.</string>
+    <string name="bulk_missing">ناقص:</string>
+    <string name="bulk_m_scientific">الاسم العلمي</string>
+    <string name="bulk_m_manufacturer">الشركة</string>
+    <string name="bulk_m_indications">دواعي الاستعمال</string>
+    <string name="bulk_m_dosage">الجرعة</string>
+</resources>

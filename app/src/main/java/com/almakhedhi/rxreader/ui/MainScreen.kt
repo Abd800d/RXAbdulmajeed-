@@ -57,6 +57,12 @@ import com.almakhedhi.rxreader.feature.scan.CameraScreen
 import com.almakhedhi.rxreader.feature.scan.CropScreen
 import com.almakhedhi.rxreader.feature.scan.ResultScreen
 import com.almakhedhi.rxreader.feature.scan.ScanViewModel
+import com.almakhedhi.rxreader.feature.search.BulkScreen
+import com.almakhedhi.rxreader.feature.search.BulkViewModel
+import com.almakhedhi.rxreader.feature.search.SearchScreen
+import com.almakhedhi.rxreader.feature.search.SearchViewModel
+import com.almakhedhi.rxreader.feature.settings.SettingsScreen
+import com.almakhedhi.rxreader.feature.settings.SettingsViewModel
 import com.almakhedhi.rxreader.feature.support.ContactScreen
 import com.google.mlkit.vision.documentscanner.GmsDocumentScanningResult
 import java.text.SimpleDateFormat
@@ -81,6 +87,9 @@ private const val ROUTE_IMPORT = "import"
 private const val ROUTE_EXPORT = "export"
 private const val ROUTE_HISTORY = "history"
 private const val ROUTE_HISTORY_DETAIL = "history/{prescriptionId}"
+private const val ROUTE_SEARCH = "search?query={query}"
+private const val ROUTE_BULK = "bulk"
+private const val ROUTE_SETTINGS = "settings"
 private const val ARG_QUERY = "query"
 private const val ARG_DRUG_ID = "drugId"
 private const val ARG_PRESCRIPTION_ID = "prescriptionId"
@@ -164,7 +173,7 @@ fun MainScreen(
                         )
                     },
                     onSearch = { query ->
-                        navController.navigate("drugs?query=${Uri.encode(query)}")
+                        navController.navigate("search?query=${Uri.encode(query)}")
                     },
                     onCatalogClick = { navController.navigate("drugs") },
                     onHistoryClick = { navController.navigate(ROUTE_HISTORY) },
@@ -180,6 +189,7 @@ fun MainScreen(
                     },
                     onRecentClick = { id -> navController.navigate("history/$id") },
                     onViewAllHistory = { navController.navigate(ROUTE_HISTORY) },
+                    onSettingsClick = { navController.navigate(ROUTE_SETTINGS) },
                 )
             }
             composable(ROUTE_SUPPORT) {
@@ -206,6 +216,7 @@ fun MainScreen(
                     onImportClick = { navController.navigate(ROUTE_IMPORT) },
                     onExportClick = { navController.navigate(ROUTE_EXPORT) },
                     onTrashClick = { navController.navigate(ROUTE_TRASH) },
+                    onBulkClick = { navController.navigate(ROUTE_BULK) },
                     onBack = { navController.popBackStack() },
                 )
             }
@@ -242,6 +253,38 @@ fun MainScreen(
             composable(ROUTE_TRASH) {
                 val viewModel: TrashViewModel = hiltViewModel()
                 TrashScreen(
+                    viewModel = viewModel,
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable(
+                route = ROUTE_SEARCH,
+                arguments = listOf(
+                    navArgument(ARG_QUERY) {
+                        type = NavType.StringType
+                        defaultValue = ""
+                    },
+                ),
+            ) { entry ->
+                val viewModel: SearchViewModel = hiltViewModel()
+                SearchScreen(
+                    viewModel = viewModel,
+                    initialQuery = Uri.decode(entry.arguments?.getString(ARG_QUERY) ?: ""),
+                    onLocalClick = { id -> navController.navigate("drug/$id") },
+                    onSaved = { id -> navController.navigate("drug/$id") },
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable(ROUTE_BULK) {
+                val viewModel: BulkViewModel = hiltViewModel()
+                BulkScreen(
+                    viewModel = viewModel,
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable(ROUTE_SETTINGS) {
+                val viewModel: SettingsViewModel = hiltViewModel()
+                SettingsScreen(
                     viewModel = viewModel,
                     onBack = { navController.popBackStack() },
                 )

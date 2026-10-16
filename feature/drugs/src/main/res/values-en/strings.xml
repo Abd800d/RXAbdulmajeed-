@@ -113,4 +113,33 @@
     <string name="disp_rx">Prescription</string>
     <string name="disp_otc">OTC</string>
     <string name="disp_controlled">Controlled</string>
+    <!-- Phase 4: gallery + enrichment -->
+    <string name="gallery_title">Product images</string>
+    <string name="gallery_empty">No images yet — add from gallery, camera or the web.</string>
+    <string name="gallery_pick">Gallery</string>
+    <string name="gallery_camera">Camera</string>
+    <string name="gallery_web">Web images</string>
+    <string name="gallery_delete_cd">Delete image</string>
+    <string name="enrich_title">Internet enrichment</string>
+    <string name="enrich_auto">Auto enrich</string>
+    <string name="enrich_ai">Complete with AI</string>
+    <string name="enrich_running">Enriching… %1$d%%</string>
+    <string name="enrich_confirm">This will contact official sources (RxNorm, FDA, DailyMed). Continue?</string>
+    <string name="enrich_done">Enriched: official data %1$s • images %2$d</string>
+    <string name="enrich_yes">Yes</string>
+    <string name="enrich_no">No</string>
+    <string name="enrich_failed">Enrichment failed — check connection and retry.</string>
+    <string name="enrich_off_hint">Enrichment is off — enable it in Settings.</string>
+    <string name="ai_confirm">One call of your daily quota will be used (%1$d left). Continue?</string>
+    <string name="ai_running">Completing with AI…</string>
+    <string name="ai_filled">Filled fields: %1$s</string>
+    <string name="ai_none">AI did not fill any new field.</string>
+    <string name="ai_quota">Daily AI quota exhausted.</string>
+    <string name="ai_error">Completion failed — check connection and Firebase setup.</string>
+    <string name="web_title">Web images</string>
+    <string name="web_empty">No images available — check connection.</string>
+    <string name="web_download">Download</string>
+    <string name="web_downloading">Downloading…</string>
+    <string name="needs_review">Needs review</string>
+    <string name="drugs_bulk">Bulk enrich</string>
 </resources>

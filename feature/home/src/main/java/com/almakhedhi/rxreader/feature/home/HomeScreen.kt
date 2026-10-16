@@ -109,13 +109,10 @@ fun HomeScreen(
     recent: List<RecentRx>,
     onRecentClick: (Long) -> Unit,
     onViewAllHistory: () -> Unit,
+    onSettingsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
-    val comingSoon = stringResource(R.string.msg_coming_soon)
-    val soon: () -> Unit = {
-        Toast.makeText(context, comingSoon, Toast.LENGTH_SHORT).show()
-    }
 
     Column(
         modifier = modifier
@@ -124,7 +121,7 @@ fun HomeScreen(
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
-        HomeHeader(onHistoryClick = onHistoryClick, onSettingsClick = soon)
+        HomeHeader(onHistoryClick = onHistoryClick, onSettingsClick = onSettingsClick)
         HeroCard()
         SearchCard(onSearch = onSearch)
         ActionRow(onScanClick = onScanClick, onGalleryClick = onGalleryClick)
@@ -761,6 +758,7 @@ private fun HomeScreenPreview() {
             ),
             onRecentClick = {},
             onViewAllHistory = {},
+            onSettingsClick = {},
         )
     }
 }

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Comprehensive search -->
+    <string name="search_title">Comprehensive search</string>
+    <string name="search_hint">Search for a drug in Arabic or English…</string>
+    <string name="layer_local">On your device</string>
+    <string name="layer_official">Official sources</string>
+    <string name="layer_ai">AI suggestions</string>
+    <string name="local_empty">No local results — try the official sources below.</string>
+    <string name="official_load">Search official sources</string>
+    <string name="official_empty">No results in official sources.</string>
+    <string name="official_hint">RxNorm, FDA and DailyMed — free, no key needed.</string>
+    <string name="google_search">Search in Google</string>
+    <string name="save_to_catalog">Save to catalog</string>
+    <string name="saving">Saving…</string>
+    <string name="ai_ask">Ask AI</string>
+    <string name="ai_remaining">Left today: %1$d</string>
+    <string name="ai_empty">No suggestions — check connection or daily quota.</string>
+    <string name="match_exact">Exact</string>
+    <string name="match_alias">Alias</string>
+    <string name="match_fts">Search</string>
+    <string name="match_fuzzy">Fuzzy</string>
+    <string name="images_title">Web images</string>
+    <string name="license_label">License: %1$s</string>
+    <string name="f_generic">Generic name</string>
+    <string name="f_brands">Brand names</string>
+    <string name="f_substance">Active substance</string>
+    <string name="f_manufacturer">Manufacturer</string>
+    <string name="f_route">Route</string>
+    <string name="f_form">Dosage form</string>
+    <string name="f_indications">Indications</string>
+    <string name="f_dosage">Dosage</string>
+    <string name="f_warnings">Warnings</string>
+    <string name="f_packaging">Packaging</string>
+    <string name="label_open">Open official label</string>
+    <string name="error_network">Connection failed — check the internet and retry.</string>
+    <!-- Bulk enrichment -->
+    <string name="bulk_title">Bulk enrichment</string>
+    <string name="bulk_desc">Pick incomplete items to complete from official sources. Official requests are free; AI calls use your daily quota.</string>
+    <string name="bulk_none">No incomplete items — the catalog is complete.</string>
+    <string name="bulk_selected">Selected: %1$d of %2$d</string>
+    <string name="bulk_all">All</string>
+    <string name="bulk_none_btn">None</string>
+    <string name="bulk_ai">Also complete with AI</string>
+    <string name="bulk_ai_estimate">AI calls: %1$d (left today %2$d)</string>
+    <string name="bulk_estimate">Selected items: %1$d • AI left: %2$d</string>
+    <string name="bulk_running">Enriching… %1$d%%</string>
+    <string name="bulk_done">Done: %1$d items • official data %2$d • images %3$d • AI %4$d</string>
+    <string name="bulk_ai_skipped">AI quota ran out mid-run — finish the rest tomorrow.</string>
+    <string name="bulk_start">Start</string>
+    <string name="bulk_cancel">Cancel</string>
+    <string name="bulk_confirm">Enrich %1$d items from official sources?</string>
+    <string name="bulk_off_hint">Enrichment is off — enable it in Settings.</string>
+    <string name="bulk_missing">Missing:</string>
+    <string name="bulk_m_scientific">generic name</string>
+    <string name="bulk_m_manufacturer">manufacturer</string>
+    <string name="bulk_m_indications">indications</string>
+    <string name="bulk_m_dosage">dosage</string>
+</resources>

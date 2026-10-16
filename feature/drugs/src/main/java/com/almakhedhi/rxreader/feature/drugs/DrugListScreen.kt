@@ -18,6 +18,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.CloudDownload
 import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.FileUpload
@@ -73,6 +74,7 @@ fun DrugListScreen(
     onImportClick: () -> Unit,
     onExportClick: () -> Unit,
     onTrashClick: () -> Unit,
+    onBulkClick: () -> Unit,
     onBack: () -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
@@ -121,6 +123,12 @@ fun DrugListScreen(
                         Icon(
                             imageVector = Icons.Filled.DeleteOutline,
                             contentDescription = stringResource(R.string.drugs_trash),
+                        )
+                    }
+                    IconButton(onClick = onBulkClick) {
+                        Icon(
+                            imageVector = Icons.Filled.CloudDownload,
+                            contentDescription = stringResource(R.string.drugs_bulk),
                         )
                     }
                 },

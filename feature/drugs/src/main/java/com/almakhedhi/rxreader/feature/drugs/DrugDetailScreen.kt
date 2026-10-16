@@ -49,6 +49,28 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts.PickMultipleVisualMedia
+import androidx.activity.result.contract.ActivityResultContracts.TakePicturePreview
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.filled.AddAPhoto
+import androidx.compose.material.icons.filled.AutoAwesome
+import androidx.compose.material.icons.filled.CloudDownload
+import androidx.compose.material.icons.filled.PhotoLibrary
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import coil.compose.AsyncImage
+import com.almakhedhi.rxreader.core.data.repo.EnrichImage
+import com.almakhedhi.rxreader.core.database.entity.DrugImageEntity
+import com.almakhedhi.rxreader.core.datastore.EnrichMode
+import java.io.File
 import com.almakhedhi.rxreader.core.designsystem.theme.InkMuted
 import com.almakhedhi.rxreader.core.designsystem.theme.InkPrimary
 import com.almakhedhi.rxreader.core.designsystem.theme.InkSecondary
@@ -67,6 +89,16 @@ fun DrugDetailScreen(
     val state by viewModel.state.collectAsState()
     var confirmDelete by remember { mutableStateOf(false) }
     var showAliasDialog by remember { mutableStateOf(false) }
+    var showEnrichConfirm by remember { mutableStateOf(false) }
+    var showAiConfirm by remember { mutableStateOf(false) }
+    var showWeb by remember { mutableStateOf(false) }
+    val pickLauncher = rememberLauncherForActivityResult(PickMultipleVisualMedia()) { uris ->
+        if (uris.isNotEmpty()) viewModel.attachUris(uris)
+    }
+    val cameraLauncher = rememberLauncherForActivityResult(TakePicturePreview()) { bitmap ->
+        if (bitmap != null) viewModel.attachBitmap(bitmap)
+    }
+    val launchCamera: () -> Unit = { cameraLauncher.launch(null) }
     LaunchedEffect(drugId) { viewModel.load(drugId) }
     LaunchedEffect(state.deleted) { if (state.deleted) onBack() }
     Scaffold(
@@ -136,6 +168,21 @@ fun DrugDetailScreen(
                                 contentDescription = stringResource(R.string.detail_reviewed_yes),
                                 tint = TealPrimary,
                             )
+                        } else {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = Icons.Filled.Warning,
+                                    contentDescription = null,
+                                    tint = Color(0xFFB7791F),
+                                    modifier = Modifier.size(18.dp),
+                                )
+                                Text(
+                                    text = stringResource(R.string.needs_review),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = Color(0xFFB7791F),
+                                    modifier = Modifier.padding(start = 4.dp),
+                                )
+                            }
                         }
                     }
                     Section(
@@ -207,10 +254,28 @@ fun DrugDetailScreen(
                         onAdd = { showAliasDialog = true },
                         onRemove = { viewModel.removeAlias(it) },
                     )
-                    Text(
-                        text = stringResource(R.string.detail_images_note),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = InkMuted,
+                    EnrichSection(
+                        state = state,
+                        onEnrichClick = {
+                            if (state.prefs.mode == EnrichMode.ASK) showEnrichConfirm = true
+                            else viewModel.enrich()
+                        },
+                        onAiClick = { showAiConfirm = true },
+                    )
+                    GallerySection(
+                        images = state.images,
+                        fileFor = viewModel::imageFile,
+                        onPick = {
+                            pickLauncher.launch(
+                                PickVisualMediaRequest(PickMultipleVisualMedia(DrugDetailViewModel.MAX_ATTACH)),
+                            )
+                        },
+                        onCamera = ::launchCamera,
+                        onWeb = {
+                            showWeb = true
+                            viewModel.loadWebImages()
+                        },
+                        onDelete = viewModel::deleteImage,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
@@ -262,6 +327,147 @@ fun DrugDetailScreen(
                 TextButton(onClick = { showAliasDialog = false }) {
                     Text(stringResource(R.string.detail_cancel))
                 }
+            },
+        )
+    }
+    if (showEnrichConfirm) {
+        AlertDialog(
+            onDismissRequest = { showEnrichConfirm = false },
+            text = { Text(stringResource(R.string.enrich_confirm)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showEnrichConfirm = false
+                        viewModel.enrich()
+                    },
+                ) { Text(stringResource(R.string.enrich_yes)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { showEnrichConfirm = false }) {
+                    Text(stringResource(R.string.enrich_no))
+                }
+            },
+        )
+    }
+    if (showAiConfirm) {
+        AlertDialog(
+            onDismissRequest = { showAiConfirm = false },
+            text = {
+                Text(
+                    stringResource(
+                        R.string.ai_confirm,
+                        state.prefs.aiRemaining,
+                    ),
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showAiConfirm = false
+                        viewModel.aiComplete()
+                    },
+                ) { Text(stringResource(R.string.enrich_yes)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { showAiConfirm = false }) {
+                    Text(stringResource(R.string.enrich_no))
+                }
+            },
+        )
+    }
+    state.enrichReport?.let { report ->
+        AlertDialog(
+            onDismissRequest = viewModel::consumeEnrichReport,
+            text = {
+                Text(
+                    stringResource(
+                        R.string.enrich_done,
+                        stringResource(
+                            if (report.enriched) R.string.enrich_yes else R.string.enrich_no,
+                        ),
+                        report.images,
+                    ),
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = viewModel::consumeEnrichReport) {
+                    Text(stringResource(R.string.detail_confirm))
+                }
+            },
+        )
+    }
+    if (state.enrichFailed) {
+        AlertDialog(
+            onDismissRequest = viewModel::consumeEnrichReport,
+            text = { Text(stringResource(R.string.enrich_failed)) },
+            confirmButton = {
+                TextButton(onClick = viewModel::consumeEnrichReport) {
+                    Text(stringResource(R.string.detail_confirm))
+                }
+            },
+        )
+    }
+    if (state.aiRunning) {
+        AlertDialog(
+            onDismissRequest = {},
+            text = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = TealPrimary,
+                        strokeWidth = 3.dp,
+                    )
+                    Text(
+                        text = stringResource(R.string.ai_running),
+                        modifier = Modifier.padding(start = 12.dp),
+                    )
+                }
+            },
+            confirmButton = {},
+        )
+    }
+    state.aiReport?.let { report ->
+        AlertDialog(
+            onDismissRequest = viewModel::consumeAiReport,
+            text = {
+                Text(
+                    when {
+                        report.quotaDenied -> stringResource(R.string.ai_quota)
+                        report.filled.isEmpty() -> stringResource(R.string.ai_none)
+                        else -> stringResource(
+                            R.string.ai_filled,
+                            report.filled.joinToString(", "),
+                        )
+                    },
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = viewModel::consumeAiReport) {
+                    Text(stringResource(R.string.detail_confirm))
+                }
+            },
+        )
+    }
+    if (state.aiFailed) {
+        AlertDialog(
+            onDismissRequest = viewModel::consumeAiReport,
+            text = { Text(stringResource(R.string.ai_error)) },
+            confirmButton = {
+                TextButton(onClick = viewModel::consumeAiReport) {
+                    Text(stringResource(R.string.detail_confirm))
+                }
+            },
+        )
+    }
+    if (showWeb) {
+        WebImagesDialog(
+            images = state.webImages,
+            loading = state.webLoading,
+            downloading = state.downloading,
+            onDownload = viewModel::downloadWebImage,
+            onDismiss = {
+                showWeb = false
+                viewModel.clearWebImages()
             },
         )
     }
@@ -377,3 +583,268 @@ private fun AliasSection(
 
 private fun formatPrice(price: Double): String =
     if (price % 1.0 == 0.0) price.toLong().toString() else price.toString()
+
+@Composable
+private fun EnrichSection(
+    state: DrugDetailUiState,
+    onEnrichClick: () -> Unit,
+    onAiClick: () -> Unit,
+) {
+    val off = state.prefs.mode == EnrichMode.OFF
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+    ) {
+        Column(modifier = Modifier.padding(14.dp)) {
+            Text(
+                text = stringResource(R.string.enrich_title),
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = TealDark,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            if (state.enriching) {
+                LinearProgressIndicator(
+                    progress = { state.enrichProgress },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = stringResource(
+                        R.string.enrich_running,
+                        (state.enrichProgress * 100).toInt(),
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = InkMuted,
+                )
+            } else {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedButton(
+                        onClick = onEnrichClick,
+                        enabled = !off,
+                        modifier = Modifier.weight(1f),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Refresh,
+                            contentDescription = null,
+                        )
+                        Text(
+                            text = stringResource(R.string.enrich_auto),
+                            modifier = Modifier.padding(start = 4.dp),
+                        )
+                    }
+                    OutlinedButton(
+                        onClick = onAiClick,
+                        enabled = !off && !state.aiRunning && state.prefs.aiRemaining > 0,
+                        modifier = Modifier.weight(1f),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.AutoAwesome,
+                            contentDescription = null,
+                        )
+                        Text(
+                            text = stringResource(R.string.enrich_ai),
+                            modifier = Modifier.padding(start = 4.dp),
+                        )
+                    }
+                }
+                if (off) {
+                    Text(
+                        text = stringResource(R.string.enrich_off_hint),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = InkMuted,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun GallerySection(
+    images: List<DrugImageEntity>,
+    fileFor: (String) -> File,
+    onPick: () -> Unit,
+    onCamera: () -> Unit,
+    onWeb: () -> Unit,
+    onDelete: (Long) -> Unit,
+) {
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+    ) {
+        Column(modifier = Modifier.padding(14.dp)) {
+            Text(
+                text = stringResource(R.string.gallery_title),
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = TealDark,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            if (images.isEmpty()) {
+                Text(
+                    text = stringResource(R.string.gallery_empty),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = InkMuted,
+                )
+            } else {
+                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    items(images, key = { it.id }) { image ->
+                        Box {
+                            AsyncImage(
+                                model = image.fileName?.let(fileFor),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .size(112.dp)
+                                    .clip(RoundedCornerShape(12.dp)),
+                            )
+                            IconButton(
+                                onClick = { onDelete(image.id) },
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .size(28.dp),
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Close,
+                                    contentDescription = stringResource(
+                                        R.string.gallery_delete_cd,
+                                    ),
+                                    tint = Color.White,
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedButton(
+                    onClick = onPick,
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.PhotoLibrary,
+                        contentDescription = null,
+                    )
+                    Text(
+                        text = stringResource(R.string.gallery_pick),
+                        modifier = Modifier.padding(start = 4.dp),
+                    )
+                }
+                OutlinedButton(
+                    onClick = onCamera,
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.AddAPhoto,
+                        contentDescription = null,
+                    )
+                    Text(
+                        text = stringResource(R.string.gallery_camera),
+                        modifier = Modifier.padding(start = 4.dp),
+                    )
+                }
+                OutlinedButton(
+                    onClick = onWeb,
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.CloudDownload,
+                        contentDescription = null,
+                    )
+                    Text(
+                        text = stringResource(R.string.gallery_web),
+                        modifier = Modifier.padding(start = 4.dp),
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun WebImagesDialog(
+    images: List<EnrichImage>,
+    loading: Boolean,
+    downloading: Set<String>,
+    onDownload: (EnrichImage) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.web_title)) },
+        text = {
+            when {
+                loading -> {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                    ) {
+                        CircularProgressIndicator(
+                            color = TealPrimary,
+                            modifier = Modifier.size(28.dp),
+                        )
+                    }
+                }
+                images.isEmpty() -> Text(stringResource(R.string.web_empty))
+                else -> {
+                    androidx.compose.foundation.lazy.LazyColumn(
+                        modifier = Modifier.height(320.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        items(images, key = { it.url }) { image ->
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                AsyncImage(
+                                    model = image.thumbUrl ?: image.url,
+                                    contentDescription = image.label,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .size(64.dp)
+                                        .clip(RoundedCornerShape(8.dp)),
+                                )
+                                Column(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(horizontal = 8.dp),
+                                ) {
+                                    Text(
+                                        text = image.label ?: image.url,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        fontWeight = FontWeight.Bold,
+                                        maxLines = 1,
+                                    )
+                                    Text(
+                                        text = image.license ?: image.credit ?: "",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = InkMuted,
+                                        maxLines = 1,
+                                    )
+                                }
+                                val busy = image.url in downloading
+                                TextButton(
+                                    onClick = { onDownload(image) },
+                                    enabled = !busy,
+                                ) {
+                                    Text(
+                                        stringResource(
+                                            if (busy) R.string.web_downloading
+                                            else R.string.web_download,
+                                        ),
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.detail_cancel))
+            }
+        },
+    )
+}

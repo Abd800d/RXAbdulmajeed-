@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="mode_title">Auto enrichment</string>
+    <string name="mode_auto">Automatic</string>
+    <string name="mode_auto_desc">Instant internet search and enrichment when needed</string>
+    <string name="mode_ask">Ask me first</string>
+    <string name="mode_ask_desc">Confirm before any internet use</string>
+    <string name="mode_off">Off</string>
+    <string name="mode_off_desc">Local only, no internet</string>
+    <string name="wifi_title">Wi-Fi only</string>
+    <string name="wifi_desc">Never use mobile data for auto enrichment</string>
+    <string name="cap_title">Daily AI cap</string>
+    <string name="cap_desc">Allowed AI calls per day</string>
+    <string name="cap_used">Used today: %1$d of %2$d</string>
+    <string name="cache_title">Cache</string>
+    <string name="cache_desc">Official-source responses saved on device</string>
+    <string name="cache_clear">Clear cache</string>
+    <string name="cache_cleared">Cache cleared</string>
+</resources>

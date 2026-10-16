@@ -61,7 +61,8 @@ class EnrichWorker @AssistedInject constructor(
                         }
                     }
                 }
-                if (withImages) {
+                // Skip web images when the gallery is already full: re-runs must not pile up duplicates.
+                if (withImages && drugs.imageCount(id) < 3) {
                     val found = runCatching {
                         enrich.searchImages(name, official?.setId).take(IMAGES_PER_DRUG)
                     }.getOrDefault(emptyList())

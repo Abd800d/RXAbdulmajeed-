@@ -113,4 +113,33 @@
     <string name="disp_rx">بوصفة</string>
     <string name="disp_otc">بدون وصفة</string>
     <string name="disp_controlled">مراقب</string>
+    <!-- Phase 4: gallery + enrichment -->
+    <string name="gallery_title">صور المنتج</string>
+    <string name="gallery_empty">لا صور بعد — أضف من المعرض أو الكاميرا أو الويب.</string>
+    <string name="gallery_pick">المعرض</string>
+    <string name="gallery_camera">الكاميرا</string>
+    <string name="gallery_web">صور الويب</string>
+    <string name="gallery_delete_cd">حذف الصورة</string>
+    <string name="enrich_title">الإثراء من الإنترنت</string>
+    <string name="enrich_auto">تحسين تلقائي</string>
+    <string name="enrich_ai">أكمل بالذكاء الاصطناعي</string>
+    <string name="enrich_running">جارٍ الإثراء… %1$d%%</string>
+    <string name="enrich_confirm">سيتم الاتصال بالمصادر الرسمية (RxNorm وFDA وDailyMed). متابعة؟</string>
+    <string name="enrich_done">تم الإثراء: بيانات رسمية %1$s • صور %2$d</string>
+    <string name="enrich_yes">نعم</string>
+    <string name="enrich_no">لا</string>
+    <string name="enrich_failed">فشل الإثراء — تحقق من الاتصال وحاول مجددًا.</string>
+    <string name="enrich_off_hint">الإثراء متوقف — فعّله من الإعدادات.</string>
+    <string name="ai_confirm">سيُستخدم استدعاء واحد من رصيدك اليومي (المتبقي %1$d). متابعة؟</string>
+    <string name="ai_running">جارٍ الإكمال بالذكاء الاصطناعي…</string>
+    <string name="ai_filled">تم ملء الحقول: %1$s</string>
+    <string name="ai_none">لم يملأ الذكاء الاصطناعي أي حقل جديد.</string>
+    <string name="ai_quota">نفد رصيد الذكاء الاصطناعي اليومي.</string>
+    <string name="ai_error">فشل الإكمال — تحقق من الاتصال وإعداد Firebase.</string>
+    <string name="web_title">صور الويب</string>
+    <string name="web_empty">لا صور متاحة — تحقق من الاتصال.</string>
+    <string name="web_download">تنزيل</string>
+    <string name="web_downloading">جارٍ التنزيل…</string>
+    <string name="needs_review">يحتاج مراجعة</string>
+    <string name="drugs_bulk">تحسين جماعي</string>
 </resources>

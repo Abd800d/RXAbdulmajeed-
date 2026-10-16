@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Settings -->
+    <string name="settings_title">الإعدادات</string>
+    <string name="mode_title">الإثراء التلقائي</string>
+    <string name="mode_auto">تلقائي</string>
+    <string name="mode_auto_desc">بحث وتحسين فوري من الإنترنت عند الحاجة</string>
+    <string name="mode_ask">اسألني أولاً</string>
+    <string name="mode_ask_desc">تأكيد قبل أي اتصال بالإنترنت</string>
+    <string name="mode_off">إيقاف</string>
+    <string name="mode_off_desc">عمل محلي فقط بدون إنترنت</string>
+    <string name="wifi_title">Wi-Fi فقط</string>
+    <string name="wifi_desc">لا تستخدم بيانات الهاتف للإثراء التلقائي</string>
+    <string name="cap_title">سقف الذكاء الاصطناعي اليومي</string>
+    <string name="cap_desc">عدد استدعاءات الذكاء الاصطناعي المسموحة يوميًا</string>
+    <string name="cap_used">المستخدم اليوم: %1$d من %2$d</string>
+    <string name="cache_title">التخزين المؤقت</string>
+    <string name="cache_desc">ردود المصادر الرسمية المحفوظة على الجهاز</string>
+    <string name="cache_clear">مسح التخزين المؤقت</string>
+    <string name="cache_cleared">تم مسح التخزين المؤقت</string>
+</resources>
