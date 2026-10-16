@@ -26,14 +26,14 @@ if (googleServicesJson.exists()) {
 // Direct Gemini API key (owner machine only): local.properties
 // `gemini.api.key`, or the GEMINI_API_KEY env var. Empty means the direct
 // path is disabled; Firebase AI Logic is still tried first.
-val geminiLocalProps = java.util.Properties()
-val geminiLocalFile = rootProject.file("local.properties")
-if (geminiLocalFile.exists()) {
-    geminiLocalFile.inputStream().use(geminiLocalProps::load)
-}
 val geminiApiKey = (
     System.getenv("GEMINI_API_KEY")
-        ?: geminiLocalProps.getProperty("gemini.api.key", "")
+        ?: rootProject.file("local.properties")
+            .takeIf { it.exists() }
+            ?.readLines()
+            ?.firstOrNull { it.trim().startsWith("gemini.api.key=") }
+            ?.substringAfter("=")
+        ?: ""
     ).trim()
 
 android {
