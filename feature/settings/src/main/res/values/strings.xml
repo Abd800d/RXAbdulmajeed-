@@ -18,4 +18,11 @@
     <string name="cache_desc">ردود المصادر الرسمية المحفوظة على الجهاز</string>
     <string name="cache_clear">مسح التخزين المؤقت</string>
     <string name="cache_cleared">تم مسح التخزين المؤقت</string>
+    <string name="key_title">مفتاح Gemini</string>
+    <string name="key_desc">الصق مفتاح AI Studio المجاني لتفعيل الذكاء الاصطناعي بدون مشروع Firebase. يُحفظ على جهازك فقط ولا يغادره أبدًا.</string>
+    <string name="key_label">مفتاح Gemini API</string>
+    <string name="key_save">حفظ</string>
+    <string name="key_clear">مسح</string>
+    <string name="key_active">المفتاح مفعّل — الذكاء الاصطناعي يعمل.</string>
+    <string name="key_missing">لا مفتاح — الذكاء يعمل فقط مع مشروع Firebase.</string>
 </resources>

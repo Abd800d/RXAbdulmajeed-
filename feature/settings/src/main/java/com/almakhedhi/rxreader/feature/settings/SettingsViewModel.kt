@@ -49,6 +49,10 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch { prefs.setAiDailyCap(cap) }
     }
 
+    fun setGeminiKey(key: String) {
+        viewModelScope.launch { prefs.setGeminiApiKey(key) }
+    }
+
     fun clearCache() {
         viewModelScope.launch {
             transient.update { it.copy(clearing = true) }

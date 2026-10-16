@@ -24,6 +24,7 @@ data class EnrichSettings(
     val wifiOnly: Boolean = false,
     val aiDailyCap: Int = DEFAULT_AI_CAP,
     val aiUsedToday: Int = 0,
+    val geminiApiKey: String = "",
 ) {
     val aiRemaining: Int get() = (aiDailyCap - aiUsedToday).coerceAtLeast(0)
 }
@@ -42,6 +43,7 @@ class EnrichPrefs @Inject constructor(
         val AI_CAP = intPreferencesKey("ai_daily_cap")
         val AI_USED = intPreferencesKey("ai_used_count")
         val AI_DATE = stringPreferencesKey("ai_used_date")
+        val GEMINI_KEY = stringPreferencesKey("gemini_api_key")
     }
 
     val settings: Flow<EnrichSettings> =
@@ -55,6 +57,7 @@ class EnrichPrefs @Inject constructor(
                 wifiOnly = prefs[Keys.WIFI_ONLY] ?: false,
                 aiDailyCap = (prefs[Keys.AI_CAP] ?: DEFAULT_AI_CAP).coerceIn(0, MAX_AI_CAP),
                 aiUsedToday = used,
+                geminiApiKey = prefs[Keys.GEMINI_KEY] ?: "",
             )
         }
 
@@ -68,6 +71,11 @@ class EnrichPrefs @Inject constructor(
 
     suspend fun setAiDailyCap(cap: Int) {
         context.enrichStore.edit { it[Keys.AI_CAP] = cap.coerceIn(0, MAX_AI_CAP) }
+    }
+
+    /** Runtime Gemini key (user-pasted in Settings): app-private, never leaves the device. */
+    suspend fun setGeminiApiKey(key: String) {
+        context.enrichStore.edit { it[Keys.GEMINI_KEY] = key.trim() }
     }
 
     /** Atomically consumes [count] AI calls when quota remains (date-aware reset). */

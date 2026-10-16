@@ -26,6 +26,7 @@ android {
 
 dependencies {
     implementation(project(":core:network"))
+    implementation(project(":core:datastore"))
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.ai)
     implementation(libs.kotlinx.serialization.json)

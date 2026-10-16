@@ -3,6 +3,7 @@ package com.almakhedhi.rxreader.core.ai
 import android.graphics.Bitmap
 import android.util.Base64
 import com.almakhedhi.rxreader.core.ai.model.AnalysisResult
+import com.almakhedhi.rxreader.core.datastore.EnrichPrefs
 import com.almakhedhi.rxreader.core.network.gemini.GBlob
 import com.almakhedhi.rxreader.core.network.gemini.GContent
 import com.almakhedhi.rxreader.core.network.gemini.GGenConfig
@@ -13,6 +14,7 @@ import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 
 /**
@@ -20,11 +22,15 @@ import kotlinx.serialization.json.Json
  * AI Studio key (no Firebase project). The key travels in the documented
  * x-goog-api-key header, which accepts both legacy AIza keys and current
  * AQ. auth keys.
+ *
+ * Key priority: runtime key pasted in Settings first, baked BuildConfig key
+ * second. Neither ever leaves the device except to Google's API.
  */
 @Singleton
 class DirectGeminiReader @Inject constructor(
     private val api: GeminiApi,
-    @Named("gemini-api-key") private val apiKey: String,
+    private val prefs: EnrichPrefs,
+    @Named("gemini-api-key") private val bakedKey: String,
 ) : AiReader {
 
     private val json = Json {
@@ -33,11 +39,16 @@ class DirectGeminiReader @Inject constructor(
         isLenient = true
     }
 
-    val isConfigured: Boolean get() = apiKey.isNotBlank()
+    suspend fun isConfigured(): Boolean = effectiveKey().isNotBlank()
+
+    private suspend fun effectiveKey(): String {
+        val runtime = prefs.settings.first().geminiApiKey.trim()
+        return runtime.ifBlank { bakedKey.trim() }
+    }
 
     override suspend fun analyze(images: List<Bitmap>): Result<AnalysisResult> =
         runCatching {
-            checkConfigured()
+            val key = checkConfigured()
             require(images.isNotEmpty()) { "No images to analyze" }
             val parts = images.take(MAX_IMAGES).map { it.toInlinePart() } +
                 GPart(text = RX_USER_PROMPT)
@@ -46,7 +57,7 @@ class DirectGeminiReader @Inject constructor(
                 contents = listOf(GContent(role = "user", parts = parts)),
                 generationConfig = GGenConfig(response_mime_type = "application/json"),
             )
-            val raw = generate(body)
+            val raw = generate(key, body)
             json.decodeFromString<AnalysisResult>(stripFences(raw))
         }
 
@@ -55,7 +66,7 @@ class DirectGeminiReader @Inject constructor(
         userPrompt: String,
     ): Result<String> =
         runCatching {
-            checkConfigured()
+            val key = checkConfigured()
             val body = GGenerateRequest(
                 system_instruction = GContent(parts = listOf(GPart(text = systemPrompt))),
                 contents = listOf(
@@ -63,17 +74,19 @@ class DirectGeminiReader @Inject constructor(
                 ),
                 generationConfig = GGenConfig(response_mime_type = "application/json"),
             )
-            stripFences(generate(body))
+            stripFences(generate(key, body))
         }
 
-    private suspend fun generate(body: GGenerateRequest): String {
-        val response = api.generateContent(FirebaseAiReader.MODEL_NAME, apiKey, body)
+    private suspend fun generate(key: String, body: GGenerateRequest): String {
+        val response = api.generateContent(FirebaseAiReader.MODEL_NAME, key, body)
         return response.firstText()?.takeIf { it.isNotEmpty() }
             ?: throw IllegalStateException("Empty AI response")
     }
 
-    private fun checkConfigured() {
-        if (!isConfigured) throw AiNotConfiguredException()
+    private suspend fun checkConfigured(): String {
+        val key = effectiveKey()
+        if (key.isBlank()) throw AiNotConfiguredException()
+        return key
     }
 
     private fun Bitmap.toInlinePart(): GPart {

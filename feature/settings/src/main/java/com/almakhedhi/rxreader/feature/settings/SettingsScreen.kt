@@ -71,6 +71,11 @@ fun SettingsScreen(viewModel: SettingsViewModel, onBack: () -> Unit) {
         ) {
             Spacer(modifier = Modifier.height(4.dp))
 
+            GeminiKeyCard(
+                currentKey = state.prefs.geminiApiKey,
+                onSave = viewModel::setGeminiKey,
+            )
+
             SectionTitle(stringResource(R.string.mode_title))
             ModeRow(
                 selected = prefs.mode == EnrichMode.AUTO,

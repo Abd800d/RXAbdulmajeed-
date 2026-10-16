@@ -18,4 +18,11 @@
     <string name="cache_desc">Official-source responses saved on device</string>
     <string name="cache_clear">Clear cache</string>
     <string name="cache_cleared">Cache cleared</string>
+    <string name="key_title">Gemini key</string>
+    <string name="key_desc">Paste a free AI Studio key to enable AI without a Firebase project. Stored on this device only, it never leaves it.</string>
+    <string name="key_label">Gemini API key</string>
+    <string name="key_save">Save</string>
+    <string name="key_clear">Clear</string>
+    <string name="key_active">Key active — AI is working.</string>
+    <string name="key_missing">No key — AI works only with a Firebase project.</string>
 </resources>
