@@ -80,6 +80,7 @@ dependencies {
     implementation(project(":core:scanner"))
     implementation(project(":core:ai"))
     implementation(project(":core:data"))
+    implementation(project(":core:database"))
     implementation(project(":feature:home"))
     implementation(project(":feature:auth"))
     implementation(project(":feature:support"))
