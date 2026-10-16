@@ -26,9 +26,9 @@ class ImageRepository @Inject constructor(
     private val imageDao: DrugImageDao,
 ) {
     fun observeImages(drugId: Long): Flow<List<DrugImageEntity>> =
-        imageDao.observeImages(drugId)
+        imageDao.observeForDrug(drugId)
 
-    suspend fun imageCount(drugId: Long): Int = imageDao.imageCount(drugId)
+    suspend fun imageCount(drugId: Long): Int = imageDao.countForDrug(drugId)
 
     fun fileFor(fileName: String): File = File(File(context.filesDir, DIR), fileName)
 
