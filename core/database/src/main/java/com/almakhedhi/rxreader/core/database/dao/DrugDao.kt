@@ -27,6 +27,12 @@ interface DrugDao {
     @Query("SELECT * FROM drugs WHERE id IN (:ids) AND deletedAt IS NULL")
     suspend fun getByIds(ids: List<Long>): List<DrugEntity>
 
+    @Query("SELECT id FROM drugs WHERE deletedAt IS NOT NULL")
+    suspend fun trashIds(): List<Long>
+
+    @Query("SELECT id FROM drugs WHERE deletedAt IS NOT NULL AND deletedAt < :before")
+    suspend fun trashedIdsBefore(before: Long): List<Long>
+
     /** Exact normalized trade-name match (match pipeline stage 1). */
     @Query("SELECT * FROM drugs WHERE tradeNorm = :norm AND deletedAt IS NULL")
     suspend fun findByTradeNorm(norm: String): List<DrugEntity>

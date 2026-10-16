@@ -31,6 +31,7 @@ class DrugRepository @Inject constructor(
     private val drugDao: DrugDao,
     private val aliasDao: DrugAliasDao,
     private val imageDao: DrugImageDao,
+    private val images: ImageRepository,
 ) {
     companion object {
         const val TRASH_RETENTION_MS = 30L * 24 * 60 * 60 * 1000
@@ -211,6 +212,29 @@ class DrugRepository @Inject constructor(
         return id
     }
 
+    /** Entity-level update that refreshes trade/search norms (enrichment path). */
+    suspend fun updateEnriched(entity: DrugEntity) {
+        val now = System.currentTimeMillis()
+        val tradeNorm = SearchText.tradeNormOf(entity.tradeEn, entity.tradeAr, entity.scientific)
+        db.withTransaction {
+            val aliasNorms = aliasDao.listForDrug(entity.id).map { it.aliasNorm }
+            drugDao.upsert(
+                entity.copy(
+                    tradeNorm = tradeNorm,
+                    updatedAt = now,
+                    searchNorm = SearchText.searchNormOf(
+                        entity.tradeEn,
+                        entity.tradeAr,
+                        entity.scientific,
+                        entity.manufacturer,
+                        entity.barcode,
+                        aliasNorms,
+                    ),
+                ),
+            )
+        }
+    }
+
     suspend fun softDelete(id: Long) {
         drugDao.softDelete(id, System.currentTimeMillis())
     }
@@ -220,13 +244,21 @@ class DrugRepository @Inject constructor(
     }
 
     suspend fun deleteForever(id: Long) {
+        images.deleteByDrug(id)
         drugDao.deleteForever(id)
     }
 
-    suspend fun emptyTrash(): Int = drugDao.emptyTrash()
+    suspend fun emptyTrash(): Int {
+        val ids = drugDao.trashIds()
+        ids.forEach { deleteForever(it) }
+        return ids.size
+    }
 
-    suspend fun purgeExpiredTrash(): Int =
-        drugDao.purgeBefore(System.currentTimeMillis() - TRASH_RETENTION_MS)
+    suspend fun purgeExpiredTrash(): Int {
+        val ids = drugDao.trashedIdsBefore(System.currentTimeMillis() - TRASH_RETENTION_MS)
+        ids.forEach { deleteForever(it) }
+        return ids.size
+    }
 
     fun observeTrash(): Flow<List<DrugEntity>> = drugDao.observeTrash()
 

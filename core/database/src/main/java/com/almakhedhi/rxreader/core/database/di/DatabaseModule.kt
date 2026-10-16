@@ -2,10 +2,12 @@ package com.almakhedhi.rxreader.core.database.di
 
 import android.content.Context
 import androidx.room.Room
+import com.almakhedhi.rxreader.core.database.MIGRATION_1_2
 import com.almakhedhi.rxreader.core.database.RxDatabase
 import com.almakhedhi.rxreader.core.database.dao.DrugAliasDao
 import com.almakhedhi.rxreader.core.database.dao.DrugDao
 import com.almakhedhi.rxreader.core.database.dao.DrugImageDao
+import com.almakhedhi.rxreader.core.database.dao.EnrichCacheDao
 import com.almakhedhi.rxreader.core.database.dao.ImportJobDao
 import com.almakhedhi.rxreader.core.database.dao.PrescriptionDao
 import dagger.Module
@@ -23,6 +25,7 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): RxDatabase =
         Room.databaseBuilder(context, RxDatabase::class.java, "rxreader.db")
+            .addMigrations(MIGRATION_1_2)
             .build()
 
     @Provides
@@ -40,4 +43,7 @@ object DatabaseModule {
 
     @Provides
     fun provideImportJobDao(db: RxDatabase): ImportJobDao = db.importJobDao()
+
+    @Provides
+    fun provideEnrichCacheDao(db: RxDatabase): EnrichCacheDao = db.enrichCacheDao()
 }

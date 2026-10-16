@@ -137,7 +137,18 @@ data class DrugImageEntity(
     val width: Int = 0,
     val height: Int = 0,
     val createdAt: Long = 0,
+    // Phase 4 columns (MIGRATION_1_2): appended last to match ALTER order.
+    val kind: String = ImageKind.MANUAL,
+    val license: String? = null,
 )
+
+/** Provenance of a drug image (v2 column [DrugImageEntity.kind]). */
+object ImageKind {
+    const val MANUAL = "manual"
+    const val DAILYMED = "dailymed"
+    const val COMMONS = "commons"
+    const val WEB = "web"
+}
 
 /** Lightweight business keys for import duplicate detection. */
 data class DrugKey(

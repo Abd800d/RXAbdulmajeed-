@@ -42,4 +42,13 @@ interface DrugImageDao {
 
     @Query("DELETE FROM drug_images WHERE id = :id")
     suspend fun delete(id: Long)
+
+    @Query("SELECT * FROM drug_images WHERE id = :id")
+    suspend fun getById(id: Long): DrugImageEntity?
+
+    @Query("SELECT * FROM drug_images WHERE drugId = :drugId ORDER BY createdAt")
+    suspend fun listForDrug(drugId: Long): List<DrugImageEntity>
+
+    @Query("DELETE FROM drug_images WHERE drugId = :drugId")
+    suspend fun deleteByDrug(drugId: Long)
 }

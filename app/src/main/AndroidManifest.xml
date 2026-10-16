@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Only used by the in-app camera fallback; the ML Kit scanner needs none. -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <!-- Phase 4: official drug sources (RxNorm/openFDA/DailyMed/Commons) + AI. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -14,6 +18,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RxReader">
+        <!-- Hilt supplies the WorkerFactory via Configuration.Provider: kill auto-init. -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
         <activity
             android:name=".MainActivity"
             android:exported="true"

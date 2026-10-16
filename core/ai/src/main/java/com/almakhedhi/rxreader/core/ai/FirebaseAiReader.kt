@@ -52,6 +52,30 @@ class FirebaseAiReader @Inject constructor(
             json.decodeFromString<AnalysisResult>(stripFences(raw))
         }
 
+    override suspend fun generateJsonText(
+        systemPrompt: String,
+        userPrompt: String,
+    ): Result<String> =
+        runCatching {
+            if (FirebaseApp.getApps(context).isEmpty()) throw AiNotConfiguredException()
+            val model = Firebase.ai(backend = GenerativeBackend.googleAI()).generativeModel(
+                modelName = MODEL_NAME,
+                generationConfig = GenerationConfig.builder()
+                    .setResponseMimeType("application/json")
+                    .build(),
+                systemInstruction = Content.Builder().apply {
+                    text(systemPrompt)
+                }.build(),
+            )
+            val prompt = Content.Builder().apply {
+                text(userPrompt)
+            }.build()
+            val response = model.generateContent(prompt)
+            val raw = response.text?.trim()?.takeIf { it.isNotEmpty() }
+                ?: throw IllegalStateException("Empty AI response")
+            stripFences(raw)
+        }
+
     private fun stripFences(raw: String): String {
         val text = raw.trim()
         if (!text.startsWith("```")) return text
