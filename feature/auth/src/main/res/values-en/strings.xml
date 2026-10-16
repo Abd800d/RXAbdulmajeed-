@@ -35,4 +35,5 @@
     <string name="auth_error_generic">Something went wrong — try again</string>
     <string name="cd_show">Show password</string>
     <string name="cd_hide">Hide password</string>
+    <string name="auth_skip">Skip — continue as guest</string>
 </resources>

@@ -78,7 +78,7 @@ private enum class AuthMode {
 
 /** Login / register / password-reset flow. Shown while signed out. */
 @Composable
-fun AuthRoute(onContactClick: () -> Unit) {
+fun AuthRoute(onContactClick: () -> Unit, onSkipClick: () -> Unit) {
     val viewModel: AuthViewModel = hiltViewModel()
     val state by viewModel.uiState.collectAsState()
     var mode by rememberSaveable { mutableStateOf(AuthMode.Login) }
@@ -87,27 +87,39 @@ fun AuthRoute(onContactClick: () -> Unit) {
         mode = next
     }
 
-    when (mode) {
-        AuthMode.Login -> LoginScreen(
-            state = state,
-            onSignIn = viewModel::signIn,
-            onGoogle = viewModel::signInWithGoogle,
-            onRegisterClick = { switch(AuthMode.Register) },
-            onForgotClick = { switch(AuthMode.Forgot) },
-            onContactClick = onContactClick,
-        )
+    Column(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.weight(1f)) {
+            when (mode) {
+                AuthMode.Login -> LoginScreen(
+                    state = state,
+                    onSignIn = viewModel::signIn,
+                    onGoogle = viewModel::signInWithGoogle,
+                    onRegisterClick = { switch(AuthMode.Register) },
+                    onForgotClick = { switch(AuthMode.Forgot) },
+                    onContactClick = onContactClick,
+                )
 
-        AuthMode.Register -> RegisterScreen(
-            state = state,
-            onSignUp = viewModel::signUp,
-            onLoginClick = { switch(AuthMode.Login) },
-        )
+                AuthMode.Register -> RegisterScreen(
+                    state = state,
+                    onSignUp = viewModel::signUp,
+                    onLoginClick = { switch(AuthMode.Login) },
+                )
 
-        AuthMode.Forgot -> ForgotScreen(
-            state = state,
-            onSend = viewModel::sendReset,
-            onBackClick = { switch(AuthMode.Login) },
-        )
+                AuthMode.Forgot -> ForgotScreen(
+                    state = state,
+                    onSend = viewModel::sendReset,
+                    onBackClick = { switch(AuthMode.Login) },
+                )
+            }
+        }
+        TextButton(
+            onClick = onSkipClick,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(8.dp),
+        ) {
+            Text(stringResource(R.string.auth_skip))
+        }
     }
 }
 

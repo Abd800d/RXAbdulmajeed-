@@ -44,6 +44,11 @@
                 <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
+        <!-- Crash reporter: plain system theme on purpose (zero app deps). -->
+        <activity
+            android:name=".CrashReportActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.Material.Light.NoActionBar" />
     </application>
 
 </manifest>

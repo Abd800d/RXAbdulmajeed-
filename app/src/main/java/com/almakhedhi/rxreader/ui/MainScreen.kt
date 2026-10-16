@@ -93,6 +93,18 @@ private const val ROUTE_SETTINGS = "settings"
 private const val ARG_QUERY = "query"
 private const val ARG_DRUG_ID = "drugId"
 private const val ARG_PRESCRIPTION_ID = "prescriptionId"
+private const val PREFS_SESSION = "session"
+private const val PREF_GUEST = "guest"
+
+/** Synchronous guest flag (SharedPreferences): offline entry without Firebase. */
+private fun isGuestMode(context: android.content.Context): Boolean =
+    context.getSharedPreferences(PREFS_SESSION, android.content.Context.MODE_PRIVATE)
+        .getBoolean(PREF_GUEST, false)
+
+private fun setGuestMode(context: android.content.Context, guest: Boolean) {
+    context.getSharedPreferences(PREFS_SESSION, android.content.Context.MODE_PRIVATE)
+        .edit().putBoolean(PREF_GUEST, guest).apply()
+}
 
 /**
  * App entry screen: auth gate + navigation graph. Owns the document-scanner
@@ -155,11 +167,19 @@ fun MainScreen(
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = remember(cached) { if (cached == null) ROUTE_AUTH else ROUTE_HOME },
+            startDestination = remember(cached) { if (cached == null && !isGuestMode(activity)) ROUTE_AUTH else ROUTE_HOME },
             modifier = Modifier.padding(innerPadding),
         ) {
             composable(ROUTE_AUTH) {
-                AuthRoute(onContactClick = { navController.navigate(ROUTE_SUPPORT) })
+                AuthRoute(
+                    onContactClick = { navController.navigate(ROUTE_SUPPORT) },
+                    onSkipClick = {
+                        setGuestMode(activity, true)
+                        navController.navigate(ROUTE_HOME) {
+                            popUpTo(ROUTE_AUTH) { inclusive = true }
+                        }
+                    },
+                )
             }
             composable(ROUTE_HOME) {
                 val homeViewModel: HomeViewModel = hiltViewModel()
