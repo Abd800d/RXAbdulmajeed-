@@ -39,10 +39,12 @@ class CsvCodecTest {
 
     @Test
     fun `falls back to windows-1256 for old arabic files`() {
-        val bytes = "بنادول,١٢٥٠".toByteArray(Charset.forName("windows-1256"))
+        // NOTE: windows-1256 has no Arabic-Indic digits, so the test uses
+        // ASCII digits (Java would silently encode ١٢٥٠ as ????).
+        val bytes = "بنادول,1250".toByteArray(Charset.forName("windows-1256"))
         val decoded = CsvCodec.decode(bytes)
         assertEquals("windows-1256", decoded.encoding)
-        assertEquals("بنادول,١٢٥٠", decoded.text)
+        assertEquals("بنادول,1250", decoded.text)
     }
 
     @Test
