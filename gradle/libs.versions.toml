@@ -10,6 +10,7 @@ firebaseBom = "35.0.1"
 gms = "4.5.0"
 hilt = "2.59"
 hiltNavigationCompose = "1.2.0"
+androidxHilt = "1.2.0"
 ksp = "2.3.4"
 lifecycle = "2.10.0"
 credentials = "1.6.0"
@@ -61,8 +62,8 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hilt" }
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHilt" }
+hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "androidxHilt" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutines" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serializationJson" }
