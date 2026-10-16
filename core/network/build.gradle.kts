@@ -27,7 +27,7 @@ android {
 dependencies {
     implementation(libs.square.retrofit)
     implementation(libs.square.retrofit.converter.kotlinx)
-    implementation(libs.square.okhttp)
+    api(libs.square.okhttp)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.hilt.android)
