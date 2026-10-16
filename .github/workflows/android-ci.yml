@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   issues: write
 
 jobs:
@@ -53,6 +53,17 @@ jobs:
           name: rxreader-debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
+
+      - name: Publish APK to rolling release
+        if: success() && github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp app/build/outputs/apk/debug/app-debug.apk RxReader-Samsung.apk
+          gh release delete dev-apk --yes --cleanup-tag || true
+          gh release create dev-apk --title "RxReader (test build)" \
+            --notes "Debug APK from CI, commit ${{ github.sha }}. Install on any Samsung phone or tablet with Android 8 or newer." \
+            RxReader-Samsung.apk
 
       - name: Upload Gradle logs
         if: always()
