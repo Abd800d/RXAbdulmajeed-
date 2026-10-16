@@ -105,56 +105,56 @@ fun DrugEditorScreen(
                     )
                 }
                 EditorSection(title = stringResource(R.string.detail_section_names)) {
-                    EditorField(draft.tradeEn, { viewModel.update { it.copy(tradeEn = it) } }, R.string.fld_trade_en)
-                    EditorField(draft.tradeAr, { viewModel.update { it.copy(tradeAr = it) } }, R.string.fld_trade_ar)
-                    EditorField(draft.scientific, { viewModel.update { it.copy(scientific = it) } }, R.string.fld_scientific)
-                    EditorField(draft.actives, { viewModel.update { it.copy(actives = it) } }, R.string.fld_actives)
-                    EditorField(draft.strength, { viewModel.update { it.copy(strength = it) } }, R.string.fld_strength)
+                    EditorField(draft.tradeEn, { value -> viewModel.update { it.copy(tradeEn = value) } }, R.string.fld_trade_en)
+                    EditorField(draft.tradeAr, { value -> viewModel.update { it.copy(tradeAr = value) } }, R.string.fld_trade_ar)
+                    EditorField(draft.scientific, { value -> viewModel.update { it.copy(scientific = value) } }, R.string.fld_scientific)
+                    EditorField(draft.actives, { value -> viewModel.update { it.copy(actives = value) } }, R.string.fld_actives)
+                    EditorField(draft.strength, { value -> viewModel.update { it.copy(strength = value) } }, R.string.fld_strength)
                     FormDropdown(
                         selected = draft.dosageForm,
-                        onSelect = { viewModel.update { it.copy(dosageForm = it) } },
+                        onSelect = { value -> viewModel.update { it.copy(dosageForm = value) } },
                     )
-                    EditorField(draft.route, { viewModel.update { it.copy(route = it) } }, R.string.fld_route)
+                    EditorField(draft.route, { value -> viewModel.update { it.copy(route = value) } }, R.string.fld_route)
                 }
                 EditorSection(title = stringResource(R.string.detail_section_product)) {
-                    EditorField(draft.manufacturer, { viewModel.update { it.copy(manufacturer = it) } }, R.string.fld_manufacturer)
-                    EditorField(draft.country, { viewModel.update { it.copy(country = it) } }, R.string.fld_country)
-                    EditorField(draft.agent, { viewModel.update { it.copy(agent = it) } }, R.string.fld_agent)
-                    EditorField(draft.regNo, { viewModel.update { it.copy(regNo = it) } }, R.string.fld_reg_no)
-                    EditorField(draft.barcode, { viewModel.update { it.copy(barcode = it) } }, R.string.fld_barcode)
-                    EditorField(draft.packSize, { viewModel.update { it.copy(packSize = it) } }, R.string.fld_pack)
+                    EditorField(draft.manufacturer, { value -> viewModel.update { it.copy(manufacturer = value) } }, R.string.fld_manufacturer)
+                    EditorField(draft.country, { value -> viewModel.update { it.copy(country = value) } }, R.string.fld_country)
+                    EditorField(draft.agent, { value -> viewModel.update { it.copy(agent = value) } }, R.string.fld_agent)
+                    EditorField(draft.regNo, { value -> viewModel.update { it.copy(regNo = value) } }, R.string.fld_reg_no)
+                    EditorField(draft.barcode, { value -> viewModel.update { it.copy(barcode = value) } }, R.string.fld_barcode)
+                    EditorField(draft.packSize, { value -> viewModel.update { it.copy(packSize = value) } }, R.string.fld_pack)
                     PriceField(
                         draft = draft,
-                        onChange = { viewModel.update { it.copy(price = it) } },
+                        onChange = { value -> viewModel.update { it.copy(price = value) } },
                     )
-                    EditorField(draft.priceDate, { viewModel.update { it.copy(priceDate = it) } }, R.string.fld_price_date)
+                    EditorField(draft.priceDate, { value -> viewModel.update { it.copy(priceDate = value) } }, R.string.fld_price_date)
                     DispensingDropdown(
                         selected = draft.dispensing,
-                        onSelect = { viewModel.update { it.copy(dispensing = it) } },
+                        onSelect = { value -> viewModel.update { it.copy(dispensing = value) } },
                     )
                 }
                 EditorSection(title = stringResource(R.string.detail_section_class)) {
-                    EditorField(draft.therapeutic, { viewModel.update { it.copy(therapeutic = it) } }, R.string.fld_therapeutic)
-                    EditorField(draft.atc, { viewModel.update { it.copy(atc = it) } }, R.string.fld_atc)
+                    EditorField(draft.therapeutic, { value -> viewModel.update { it.copy(therapeutic = value) } }, R.string.fld_therapeutic)
+                    EditorField(draft.atc, { value -> viewModel.update { it.copy(atc = value) } }, R.string.fld_atc)
                 }
                 EditorSection(title = stringResource(R.string.detail_section_clinical)) {
-                    EditorField(draft.indications, { viewModel.update { it.copy(indications = it) } }, R.string.fld_indications, singleLine = false)
-                    EditorField(draft.dosageAdults, { viewModel.update { it.copy(dosageAdults = it) } }, R.string.fld_dose_adults, singleLine = false)
-                    EditorField(draft.dosageChildren, { viewModel.update { it.copy(dosageChildren = it) } }, R.string.fld_dose_children, singleLine = false)
-                    EditorField(draft.contraindications, { viewModel.update { it.copy(contraindications = it) } }, R.string.fld_contra, singleLine = false)
-                    EditorField(draft.sideEffects, { viewModel.update { it.copy(sideEffects = it) } }, R.string.fld_side, singleLine = false)
-                    EditorField(draft.interactions, { viewModel.update { it.copy(interactions = it) } }, R.string.fld_interactions, singleLine = false)
-                    EditorField(draft.pregnancy, { viewModel.update { it.copy(pregnancy = it) } }, R.string.fld_pregnancy, singleLine = false)
-                    EditorField(draft.warnings, { viewModel.update { it.copy(warnings = it) } }, R.string.fld_warnings, singleLine = false)
-                    EditorField(draft.storage, { viewModel.update { it.copy(storage = it) } }, R.string.fld_storage, singleLine = false)
+                    EditorField(draft.indications, { value -> viewModel.update { it.copy(indications = value) } }, R.string.fld_indications, singleLine = false)
+                    EditorField(draft.dosageAdults, { value -> viewModel.update { it.copy(dosageAdults = value) } }, R.string.fld_dose_adults, singleLine = false)
+                    EditorField(draft.dosageChildren, { value -> viewModel.update { it.copy(dosageChildren = value) } }, R.string.fld_dose_children, singleLine = false)
+                    EditorField(draft.contraindications, { value -> viewModel.update { it.copy(contraindications = value) } }, R.string.fld_contra, singleLine = false)
+                    EditorField(draft.sideEffects, { value -> viewModel.update { it.copy(sideEffects = value) } }, R.string.fld_side, singleLine = false)
+                    EditorField(draft.interactions, { value -> viewModel.update { it.copy(interactions = value) } }, R.string.fld_interactions, singleLine = false)
+                    EditorField(draft.pregnancy, { value -> viewModel.update { it.copy(pregnancy = value) } }, R.string.fld_pregnancy, singleLine = false)
+                    EditorField(draft.warnings, { value -> viewModel.update { it.copy(warnings = value) } }, R.string.fld_warnings, singleLine = false)
+                    EditorField(draft.storage, { value -> viewModel.update { it.copy(storage = value) } }, R.string.fld_storage, singleLine = false)
                 }
                 EditorSection(title = stringResource(R.string.detail_section_system)) {
-                    EditorField(draft.rxNormId, { viewModel.update { it.copy(rxNormId = it) } }, R.string.fld_rxnorm)
-                    EditorField(draft.dailymedId, { viewModel.update { it.copy(dailymedId = it) } }, R.string.fld_dailymed)
+                    EditorField(draft.rxNormId, { value -> viewModel.update { it.copy(rxNormId = value) } }, R.string.fld_rxnorm)
+                    EditorField(draft.dailymedId, { value -> viewModel.update { it.copy(dailymedId = value) } }, R.string.fld_dailymed)
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(
                             checked = draft.reviewed,
-                            onCheckedChange = { viewModel.update { it.copy(reviewed = it) } },
+                            onCheckedChange = { value -> viewModel.update { it.copy(reviewed = value) } },
                         )
                         Text(
                             text = stringResource(R.string.fld_reviewed),

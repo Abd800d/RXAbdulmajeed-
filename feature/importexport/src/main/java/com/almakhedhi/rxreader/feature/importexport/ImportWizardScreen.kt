@@ -829,5 +829,3 @@ private fun ContentResolver.displayName(uri: Uri): String {
     return "import"
 }
 
-@Suppress("UnusedPrivateProperty")
-private val unusedTextButtonCheck = TextButton::class

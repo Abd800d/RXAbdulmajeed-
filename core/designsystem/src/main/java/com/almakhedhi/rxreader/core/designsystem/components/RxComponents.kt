@@ -37,8 +37,8 @@ import com.almakhedhi.rxreader.core.designsystem.theme.TealPrimary
 @Composable
 fun GradientButton(
     text: String,
-    icon: ImageVector,
     onClick: () -> Unit,
+    icon: ImageVector? = null,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     loading: Boolean = false,
@@ -74,12 +74,14 @@ fun GradientButton(
                 )
             } else {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = null,
-                        modifier = Modifier.size(22.dp),
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
+                    icon?.let {
+                        Icon(
+                            imageVector = it,
+                            contentDescription = null,
+                            modifier = Modifier.size(22.dp),
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                    }
                     Text(
                         text = text,
                         style = MaterialTheme.typography.titleMedium,

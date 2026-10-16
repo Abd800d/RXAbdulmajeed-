@@ -384,5 +384,3 @@ private fun buildShareText(
     }.trim()
 }
 
-@Suppress("UnusedPrivateProperty")
-private val unusedOutlinedButtonCheck = OutlinedButton::class

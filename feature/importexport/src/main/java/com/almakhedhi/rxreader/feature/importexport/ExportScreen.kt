@@ -327,5 +327,3 @@ private fun suggestedName(format: ExportFormat): String {
     return "rxreader-drugs-$stamp.$ext"
 }
 
-@Suppress("UnusedPrivateProperty")
-private val unusedTextButtonCheck = TextButton::class
