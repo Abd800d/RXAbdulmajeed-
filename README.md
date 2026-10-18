@@ -67,19 +67,21 @@ VITE_APH_AI_ENDPOINT=https://your-secure-api.example.com/medication-answer
 
 The endpoint receives `{ question, language, policy }` and should return `{ answer, sources }`. Do not put provider secrets in `VITE_*` variables.
 
-## Native packaging with Capacitor
+## Native Android APK
 
-The repository includes `capacitor.config.ts`. After installing the platform package you need:
+The repository includes a complete Capacitor Android project with APH launcher and splash artwork. Build an installable debug APK with:
 
 ```bash
+npm ci
 npm run build
-npm install @capacitor/android   # and/or @capacitor/ios
-npx cap add android              # one time
-npx cap sync
-npx cap open android
+npx cap sync android
+cd android
+./gradlew assembleDebug
 ```
 
-For iOS, run the equivalent commands on macOS with Xcode.
+The APK is written to `android/app/build/outputs/apk/debug/app-debug.apk`. GitHub Actions also builds and publishes the APK as a workflow artifact on every push to this Arena branch.
+
+For iOS, add `@capacitor/ios` and run the equivalent Capacitor commands on macOS with Xcode.
 
 ## Ownership
 

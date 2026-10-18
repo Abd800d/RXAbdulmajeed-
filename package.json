@@ -11,6 +11,7 @@
     "lint": "tsc -b --pretty false"
   },
   "dependencies": {
+    "@capacitor/android": "^7.6.9",
     "@capacitor/core": "^7.4.3",
     "@fontsource-variable/noto-sans-arabic": "^5.3.0",
     "@fontsource-variable/plus-jakarta-sans": "^5.3.0",
