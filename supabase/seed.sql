@@ -1,0 +1,6 @@
+-- The mobile app already contains a small verified starter cache.
+-- Import the complete catalog after migration with:
+-- node scripts/import-to-supabase.mjs path/to/catalog.csv
+--
+-- This file intentionally does not invent Yemen agents or registrations.
+-- Only publish records after verification from an authorized source.
