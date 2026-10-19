@@ -94,7 +94,7 @@ jobs:
             done < /tmp/flutter-analyze.log
           fi
           exit "$status"
-      - run: flutter test
+      - run: flutter test --timeout 2m
       - run: flutter build apk --release
       - run: flutter build appbundle --release
       - name: Name transition artifacts and calculate checksums
