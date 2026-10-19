@@ -22,7 +22,7 @@ flutter build apk --release --dart-define=APH_API_BASE_URL=https://api.example.c
 flutter build appbundle --release --dart-define=APH_API_BASE_URL=https://api.example.com
 ```
 
-The checked-in release configuration intentionally uses debug signing for CI transition previews. It is **not** a Play production signature. Configure an encrypted owner-controlled keystore before a store release.
+The separately named CI transition preview is a debug-signed, installable APK. It is **not** a Play production signature. Configure an encrypted owner-controlled keystore before producing the final release APK/AAB.
 
 ## Implemented foundation
 

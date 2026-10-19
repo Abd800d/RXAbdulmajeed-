@@ -59,7 +59,7 @@ jobs:
       - run: npm run test:migration
 
   flutter:
-    name: Flutter analyze, test, APK, and AAB
+    name: Flutter analyze, test, and installable APK
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -110,19 +110,30 @@ jobs:
             done < /tmp/flutter-test.log
           fi
           exit "$status"
-      - run: flutter build apk --release
-      - run: flutter build appbundle --release
-      - name: Name transition artifacts and calculate checksums
+      - name: Build installable Flutter preview APK
+        shell: bash
         run: |
-          cp build/app/outputs/flutter-apk/app-release.apk APH-Flutter-V2-preview.apk
-          cp build/app/outputs/bundle/release/app-release.aab APH-Flutter-V2-preview.aab
-          sha256sum APH-Flutter-V2-preview.apk APH-Flutter-V2-preview.aab > SHA256SUMS.txt
+          set +e
+          flutter build apk --debug > /tmp/flutter-apk-build.log 2>&1
+          status=$?
+          cat /tmp/flutter-apk-build.log
+          if [ "$status" -ne 0 ]; then
+            message=$(tail -n 60 /tmp/flutter-apk-build.log)
+            escaped="${message//'%'/'%25'}"
+            escaped="${escaped//$'\r'/'%0D'}"
+            escaped="${escaped//$'\n'/'%0A'}"
+            echo "::error title=Flutter APK build::$escaped"
+          fi
+          exit "$status"
+      - name: Name transition artifact and calculate checksum
+        run: |
+          cp build/app/outputs/flutter-apk/app-debug.apk APH-Flutter-V2-preview.apk
+          sha256sum APH-Flutter-V2-preview.apk > SHA256SUMS.txt
       - uses: actions/upload-artifact@v4
         with:
-          name: APH-Flutter-V2-transition-builds
+          name: APH-Flutter-V2-transition-build
           path: |
             apps/aph_mobile/APH-Flutter-V2-preview.apk
-            apps/aph_mobile/APH-Flutter-V2-preview.aab
             apps/aph_mobile/SHA256SUMS.txt
           if-no-files-found: error
           retention-days: 30
@@ -139,7 +150,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/download-artifact@v4
         with:
-          name: APH-Flutter-V2-transition-builds
+          name: APH-Flutter-V2-transition-build
           path: /tmp/aph-v2-artifacts
       - name: Publish preview without replacing V1.1.0
         run: |
