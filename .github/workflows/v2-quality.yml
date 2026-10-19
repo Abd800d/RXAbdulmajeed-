@@ -70,6 +70,15 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
+          cache: gradle
+          cache-dependency-path: |
+            apps/aph_mobile/android/*.gradle.kts
+            apps/aph_mobile/android/gradle/wrapper/gradle-wrapper.properties
+            apps/aph_mobile/android/app/*.gradle.kts
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.ANDROID_SDK_ROOT }}/ndk/28.2.13676358
+          key: ${{ runner.os }}-android-ndk-r28c
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
