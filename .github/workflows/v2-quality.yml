@@ -78,7 +78,22 @@ jobs:
       - run: flutter pub get
       - run: dart run build_runner build --delete-conflicting-outputs
       - run: dart format lib test
-      - run: flutter analyze --fatal-infos
+      - name: Analyze Flutter source
+        shell: bash
+        run: |
+          set +e
+          flutter analyze --fatal-infos > /tmp/flutter-analyze.log 2>&1
+          status=$?
+          cat /tmp/flutter-analyze.log
+          if [ "$status" -ne 0 ]; then
+            while IFS= read -r line; do
+              escaped="${line//'%'/'%25'}"
+              escaped="${escaped//$'\r'/'%0D'}"
+              escaped="${escaped//$'\n'/'%0A'}"
+              echo "::error title=Flutter analyzer::$escaped"
+            done < /tmp/flutter-analyze.log
+          fi
+          exit "$status"
       - run: flutter test
       - run: flutter build apk --release
       - run: flutter build appbundle --release
