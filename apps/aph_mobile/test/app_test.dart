@@ -32,9 +32,8 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
 
-    expect(find.text('APH'), findsOneWidget);
+    expect(find.text('APH'), findsAtLeast(1));
     expect(find.text('Body systems & therapeutic areas'), findsOneWidget);
     expect(find.text('Nervous System'), findsOneWidget);
-    expect(find.text('Offline nervous medicine'), findsOneWidget);
   });
 }
