@@ -7,6 +7,11 @@ on:
     paths-ignore:
       - 'APH-*.apk'
       - 'gradle-build.log'
+      - 'apps/aph_mobile/**'
+      - 'services/api/**'
+      - 'deploy/docker-compose.v2.yml'
+      - 'docs/V2_ARCHITECTURE.md'
+      - '.github/workflows/v2-quality.yml'
   workflow_dispatch:
 
 permissions:
