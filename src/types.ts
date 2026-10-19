@@ -138,7 +138,7 @@ export interface CloudProfile {
   id: string;
   email: string;
   displayName?: string;
-  role: 'user' | 'pharmacist' | 'editor' | 'admin';
+  role: 'user' | 'support' | 'reviewer' | 'pharmacist_editor' | 'admin' | 'owner';
 }
 
 export interface CloudSyncStatus {

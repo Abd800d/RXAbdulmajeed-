@@ -86,7 +86,7 @@ All public signups intentionally start as `user`; knowing the owner email alone 
 
 ```sql
 update public.profiles
-set role = 'admin'
+set role = 'owner'
 where lower(email) = '7a8b1d@gmail.com';
 
 select id, email, role

@@ -1,6 +1,6 @@
 # APH · AbdulmajeedPharma
 
-**APH** is a bilingual Arabic/English, mobile-first pharmacology and commercial-medicine platform owned by **Dr. Abdulmajeed Abdullah Almakhedhi**. It works offline from a permanent IndexedDB catalog and can connect to a shared Supabase/PostgreSQL backend so administrator edits, searches, messages, and replies reach every user.
+**APH** is a bilingual Arabic/English, mobile-first pharmacology and commercial-medicine platform owned by **Dr. Abdulmajeed Abdullah Almakhedhi**. The validated React/Capacitor V1 remains available while V2 moves the long-term mobile client to Flutter with permanent Drift/SQLite storage and adds a secure FastAPI gateway over Supabase/PostgreSQL.
 
 ## What is included
 
@@ -14,11 +14,22 @@
 - Trusted-source enrichment from RxNorm/RxNav, openFDA/DailyMed, and PubChem; optional Google Custom Search imagery
 - In-app public support questions and realtime administrator replies
 - Separate responsive administration portal at `/admin`
-- Password and email-code/magic-link authentication with `user`, `pharmacist`, `editor`, and `admin` roles
+- Password and email-code/magic-link authentication with `owner`, `admin`, `pharmacist_editor`, `reviewer`, `support`, and `user` roles
 - Resumable batched CSV/TSV/JSON/JSONL/XLSX imports and local-image upload ingestion
 - Capacitor Android project (`com.abdulmajeed.aph`) and automated APK workflow
 
 > **Data integrity:** APH never fabricates a manufacturer, Yemen agent/importer, registration, or market availability. Missing values remain empty until an authorized administrator imports or verifies them. The bundled 22-medicine/24-product catalog is an offline starter, not a complete national formulary.
+
+## V2 transition
+
+The current application is retained unchanged as the stable migration baseline. New V2 components live alongside it:
+
+- [`apps/aph_mobile`](apps/aph_mobile) — Flutter/Material 3 Arabic-English client, Drift/SQLite cache, favorites, barcode confirmation, cursor sync, and grounded-assistant boundary.
+- [`services/api`](services/api) — FastAPI `/v1` gateway for protected Supabase access, search, synchronization, and source-grounded AI.
+- [`supabase/migrations/202610190001_aph_v2_domain.sql`](supabase/migrations/202610190001_aph_v2_domain.sql) — normalized clinical/market/provenance/review/import/message/sync domain.
+- [`docs/V2_ARCHITECTURE.md`](docs/V2_ARCHITECTURE.md) — approved boundaries, rollout stages, and definition of production completion.
+
+The V2 preview build is separately named and does not replace `APH-AbdulmajeedPharma-v1.1.0.apk`.
 
 ## Local development
 
@@ -38,7 +49,7 @@ npm audit --audit-level=moderate
 
 `npm run validate` runs TypeScript, 10 application tests, a real PostgreSQL-WASM migration/security test, and the production Vite/PWA build.
 
-## Production architecture
+## Current V1 production architecture
 
 | Layer | Implementation |
 |---|---|

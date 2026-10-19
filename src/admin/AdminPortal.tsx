@@ -59,7 +59,7 @@ export function AdminPortal() {
   };
 
   const loadAdminData = async () => {
-    if (!profile || !['admin', 'editor'].includes(profile.role)) return;
+    if (!profile || !['owner', 'admin', 'pharmacist_editor'].includes(profile.role)) return;
     try {
       const [nextStats, nextMessages] = await Promise.all([getCloudStats(), listAdminMessages(250)]);
       setCloudStats(nextStats);
@@ -212,8 +212,8 @@ export function AdminPortal() {
     </div>
   );
 
-  if (!['admin', 'editor'].includes(profile.role)) return (
-    <div className="admin-setup-page"><div className="admin-setup-card"><AphLogo /><span className="admin-setup-icon"><LockKeyhole size={32} /></span><h1>{language === 'ar' ? 'الحساب ليس مديراً' : 'Admin access pending'}</h1><p>{language === 'ar' ? 'يجب أن يمنح مدير موثوق هذا الحساب دور editor أو admin. لتهيئة أول مدير اتبع docs/DEPLOYMENT.md.' : 'A trusted administrator must grant this account the editor or admin role. For the first administrator, follow docs/DEPLOYMENT.md.'}<br />{profile.email}</p><button className="secondary-button" onClick={() => void signOutCloud()}><LogOut size={16} />{language === 'ar' ? 'تسجيل الخروج' : 'Sign out'}</button></div></div>
+  if (!['owner', 'admin', 'pharmacist_editor'].includes(profile.role)) return (
+    <div className="admin-setup-page"><div className="admin-setup-card"><AphLogo /><span className="admin-setup-icon"><LockKeyhole size={32} /></span><h1>{language === 'ar' ? 'الحساب ليس مديراً' : 'Admin access pending'}</h1><p>{language === 'ar' ? 'يجب أن يمنح مدير موثوق هذا الحساب دور owner أو admin أو pharmacist_editor. لتهيئة أول مالك اتبع docs/DEPLOYMENT.md.' : 'A trusted administrator must grant this account the owner, admin, or pharmacist_editor role. For the first owner, follow docs/DEPLOYMENT.md.'}<br />{profile.email}</p><button className="secondary-button" onClick={() => void signOutCloud()}><LogOut size={16} />{language === 'ar' ? 'تسجيل الخروج' : 'Sign out'}</button></div></div>
   );
 
   const nav = [

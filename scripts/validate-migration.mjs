@@ -12,10 +12,11 @@ import { pgcrypto } from '@electric-sql/pglite/contrib/pgcrypto';
 import { pg_trgm } from '@electric-sql/pglite/contrib/pg_trgm';
 import { unaccent } from '@electric-sql/pglite/contrib/unaccent';
 
-const migrationPath = new URL('../supabase/migrations/202610180001_aph_production_schema.sql', import.meta.url);
+const migrationsDirectory = new URL('../supabase/migrations/', import.meta.url);
 const database = new PGlite({ extensions: { pgcrypto, pg_trgm, unaccent } });
 const ownerId = '00000000-0000-4000-8000-000000000001';
 const userId = '00000000-0000-4000-8000-000000000002';
+const strangerId = '00000000-0000-4000-8000-000000000003';
 
 try {
   await database.exec(`
@@ -43,24 +44,35 @@ try {
     );
     create table storage.objects (
       id uuid primary key default gen_random_uuid(),
-      bucket_id text
+      bucket_id text,
+      name text,
+      owner uuid
     );
     create publication supabase_realtime;
   `);
 
-  await database.exec(fs.readFileSync(migrationPath, 'utf8'));
+  const migrationFiles = fs.readdirSync(migrationsDirectory)
+    .filter((name) => name.endsWith('.sql'))
+    .sort();
+  for (const migrationFile of migrationFiles) {
+    await database.exec(fs.readFileSync(new URL(migrationFile, migrationsDirectory), 'utf8'));
+  }
 
   await database.exec(`
     grant usage on schema public to anon, authenticated;
     grant select on public.body_systems, public.drugs, public.products,
       public.messages, public.message_contacts, public.catalog_tombstones
       to anon, authenticated;
+    grant select, insert, update on public.conversations to authenticated;
+    grant select, insert on public.conversation_messages, public.conversation_members,
+      public.message_attachments to authenticated;
     grant select, update on public.profiles to authenticated;
     grant insert on public.messages to anon, authenticated;
 
     insert into auth.users(id, email, raw_user_meta_data) values
       ('${ownerId}', '7a8b1d@gmail.com', '{"display_name":"Owner"}'),
-      ('${userId}', 'user@example.com', '{"display_name":"User"}');
+      ('${userId}', 'user@example.com', '{"display_name":"User"}'),
+      ('${strangerId}', 'stranger@example.com', '{"display_name":"Stranger"}');
 
     insert into public.drugs(
       id, generic_name, arabic_name, system_id, pharmacology_class,
@@ -103,10 +115,51 @@ try {
   assert.deepEqual(protectedProfile.rows[0], { role: 'user', display_name: 'Updated safely' });
 
   // The SQL editor/service role has no end-user uid and can securely bootstrap
-  // the first administrator. End users cannot take this path because RLS blocks it.
-  await database.exec(`select set_config('request.jwt.claim.sub', '', false); update public.profiles set role = 'admin' where id = '${ownerId}'`);
+  // the first owner. End users cannot take this path because RLS blocks it.
+  await database.exec(`select set_config('request.jwt.claim.sub', '', false); update public.profiles set role = 'owner' where id = '${ownerId}'`);
   const owner = await database.query(`select role from public.profiles where id = '${ownerId}'`);
-  assert.equal(owner.rows[0]?.role, 'admin');
+  assert.equal(owner.rows[0]?.role, 'owner');
+
+  const v2Tables = await database.query(`
+    select table_name from information_schema.tables
+    where table_schema = 'public' and table_name in (
+      'atc_classifications', 'manufacturers', 'product_active_ingredients',
+      'product_market_records', 'field_provenance', 'catalog_revisions',
+      'catalog_change_feed', 'import_batches', 'conversations', 'notifications'
+    )
+  `);
+  assert.equal(v2Tables.rows.length, 10, 'all critical V2 domain tables must exist');
+
+  const primaryComposition = await database.query(`
+    select ingredient_id, component_strength, is_primary
+    from public.product_active_ingredients where product_id = 'panadol'
+  `);
+  assert.deepEqual(primaryComposition.rows[0], {
+    ingredient_id: 'paracetamol', component_strength: '500 mg', is_primary: true,
+  });
+
+  const changeFeed = await database.query(`
+    select entity_type, entity_id, operation, is_public
+    from public.catalog_change_feed order by sequence
+  `);
+  assert.ok(changeFeed.rows.some((row) => row.entity_id === 'paracetamol' && row.operation === 'UPSERT' && row.is_public));
+  assert.ok(changeFeed.rows.some((row) => row.entity_id === 'panadol' && row.operation === 'UPSERT' && row.is_public));
+
+  const conversationId = '10000000-0000-4000-8000-000000000001';
+  await database.exec(`
+    set role authenticated;
+    select set_config('request.jwt.claim.sub', '${userId}', false);
+    insert into public.conversations(id, created_by, subject)
+    values ('${conversationId}', '${userId}', 'Private support');
+    insert into public.conversation_messages(conversation_id, sender_id, body)
+    values ('${conversationId}', '${userId}', 'Private message');
+  `);
+  const ownConversation = await database.query(`select id from public.conversations where id = '${conversationId}'`);
+  assert.equal(ownConversation.rows.length, 1, 'conversation creator must retain access without RLS recursion');
+  await database.exec(`select set_config('request.jwt.claim.sub', '${strangerId}', false)`);
+  const strangerConversation = await database.query(`select id from public.conversations where id = '${conversationId}'`);
+  assert.equal(strangerConversation.rows.length, 0, 'unrelated users must not read private conversations');
+  await database.exec('reset role');
 
   await database.exec(`set role anon; select set_config('request.jwt.claim.sub', '', false)`);
   const publicMessages = await database.query(`select body from public.messages`);
@@ -124,7 +177,7 @@ try {
   const tombstone = await database.query(`select entity_type, entity_id from public.catalog_tombstones where entity_id = 'paracetamol'`);
   assert.deepEqual(tombstone.rows[0], { entity_type: 'drug', entity_id: 'paracetamol' });
 
-  console.log('APH migration validation passed: schema, fuzzy/full-text search, role protection, private contacts, message RPC, and deletion tombstones.');
+  console.log('APH migration validation passed: V1/V2 schema, search, six-role protection, composition compatibility, sequence sync, private contacts, messages, and tombstones.');
 } finally {
   await database.close();
 }
