@@ -94,7 +94,22 @@ jobs:
             done < /tmp/flutter-analyze.log
           fi
           exit "$status"
-      - run: flutter test --timeout 2m
+      - name: Test Flutter application
+        shell: bash
+        run: |
+          set +e
+          timeout 240s flutter test --timeout 60s > /tmp/flutter-test.log 2>&1
+          status=$?
+          cat /tmp/flutter-test.log
+          if [ "$status" -ne 0 ]; then
+            while IFS= read -r line; do
+              escaped="${line//'%'/'%25'}"
+              escaped="${escaped//$'\r'/'%0D'}"
+              escaped="${escaped//$'\n'/'%0A'}"
+              echo "::error title=Flutter tests::$escaped"
+            done < /tmp/flutter-test.log
+          fi
+          exit "$status"
       - run: flutter build apk --release
       - run: flutter build appbundle --release
       - name: Name transition artifacts and calculate checksums
