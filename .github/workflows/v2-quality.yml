@@ -123,7 +123,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          flutter build apk --release > /tmp/flutter-apk-build.log 2>&1
+          flutter build apk --release --split-per-abi --split-debug-info=build/symbols > /tmp/flutter-apk-build.log 2>&1
           status=$?
           cat /tmp/flutter-apk-build.log
           if [ "$status" -ne 0 ]; then
@@ -134,21 +134,21 @@ jobs:
             echo "::error title=Flutter APK build::$escaped"
           fi
           exit "$status"
-      - name: Name transition artifact and calculate checksum
+      - name: Name lightweight arm64 artifact and calculate checksum
         run: |
-          cp build/app/outputs/flutter-apk/app-release.apk APH-Flutter-V2-preview.apk
-          sha256sum APH-Flutter-V2-preview.apk > SHA256SUMS.txt
+          cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk APH-Flutter-V2-lite-arm64.apk
+          sha256sum APH-Flutter-V2-lite-arm64.apk > SHA256SUMS-lite.txt
       - uses: actions/upload-artifact@v4
         with:
-          name: APH-Flutter-V2-transition-build
+          name: APH-Flutter-V2-lite-arm64-build
           path: |
-            apps/aph_mobile/APH-Flutter-V2-preview.apk
-            apps/aph_mobile/SHA256SUMS.txt
+            apps/aph_mobile/APH-Flutter-V2-lite-arm64.apk
+            apps/aph_mobile/SHA256SUMS-lite.txt
           if-no-files-found: error
           retention-days: 30
 
   publish-preview-apk:
-    name: Publish separately named Flutter preview APK
+    name: Publish lightweight Flutter arm64 APK
     if: github.event_name == 'push' && github.ref == 'refs/heads/arena/b4802f14-rxabdulmajeed'
     needs: [api, migrations, flutter]
     runs-on: ubuntu-latest
@@ -159,11 +159,11 @@ jobs:
           fetch-depth: 0
       - uses: actions/download-artifact@v4
         with:
-          name: APH-Flutter-V2-transition-build
+          name: APH-Flutter-V2-lite-arm64-build
           path: /tmp/aph-v2-artifacts
-      - name: Publish preview without replacing V1.1.0
+      - name: Publish lightweight preview without replacing other APKs
         run: |
-          apk_path=$(find /tmp/aph-v2-artifacts -type f -name 'APH-Flutter-V2-preview.apk' -print -quit)
+          apk_path=$(find /tmp/aph-v2-artifacts -type f -name 'APH-Flutter-V2-lite-arm64.apk' -print -quit)
           test -n "$apk_path"
           apk_size=$(stat -c '%s' "$apk_path")
           if [ "$apk_size" -ge 99000000 ]; then
@@ -171,14 +171,14 @@ jobs:
             exit 1
           fi
           git pull --rebase origin arena/b4802f14-rxabdulmajeed
-          cp "$apk_path" ./APH-Flutter-V2-preview.apk
-          sha256sum APH-Flutter-V2-preview.apk > APH-Flutter-V2-preview.sha256
+          cp "$apk_path" ./APH-Flutter-V2-lite-arm64.apk
+          sha256sum APH-Flutter-V2-lite-arm64.apk > APH-Flutter-V2-lite-arm64.sha256
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f APH-Flutter-V2-preview.apk APH-Flutter-V2-preview.sha256
+          git add -f APH-Flutter-V2-lite-arm64.apk APH-Flutter-V2-lite-arm64.sha256
           if git diff --cached --quiet; then
-            echo "Flutter preview APK is already current."
+            echo "Lightweight Flutter APK is already current."
             exit 0
           fi
-          git commit -m "build: publish APH Flutter V2 preview APK"
+          git commit -m "build: publish lightweight APH Flutter V2 APK"
           git push origin HEAD:arena/b4802f14-rxabdulmajeed
